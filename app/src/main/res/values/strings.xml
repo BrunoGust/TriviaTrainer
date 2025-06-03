@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TriviaTrainerApp</string>
+    <string name="usuario_label">USUARIO:</string>
+    <string name="usuario_pass">CLAVE:</string>
+    <string name="ingresar_btn"> > Ingresar </string>
+    <string name="salir_btn"> > Salir </string>
+    <string name="nuevo_quizz">NUEVO QUIZ</string>
+</resources>

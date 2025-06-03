@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InicioActivity"
+    android:background="@color/background_color"
+    >
+
+    <LinearLayout
+        android:layout_width="376dp"
+        android:layout_height="798dp"
+        android:background="@drawable/border_background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.9">
+
+        <LinearLayout
+            android:id="@+id/fragmentContainerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saludos, USUARIO!"
+                android:textColor="@color/text_color"
+                android:textSize="16dp" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_border_green"
+                android:text="@string/salir_btn"
+                android:textColor="@color/text_color"
+                android:textSize="25sp"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="87dp"
+            android:layout_marginTop="45dp"
+            android:gravity="center|center_horizontal"
+            android:shadowColor="@color/text_color"
+            android:shadowDx="15"
+            android:shadowDy="15"
+            android:shadowRadius="25"
+            android:text="@string/nuevo_quizz"
+            android:textColor="@color/text_color"
+            android:textSize="64sp"
+            android:fontFamily="@font/vt323"
+            />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="332dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70sp"
+            android:layout_marginBottom="20sp"
+            android:fontFamily="@font/vt323"
+            android:text="INDICA O INGRESA UN TEMA PARA TU QUIZ"
+            android:textColor="@color/text_color"
+            android:textSize="22sp" />
+
+        <EditText
+            android:id="@+id/editTextText"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/edittext_border_green"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
