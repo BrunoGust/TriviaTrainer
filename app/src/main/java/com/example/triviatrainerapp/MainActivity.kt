@@ -1,5 +1,6 @@
 package com.example.triviatrainerapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
@@ -19,7 +20,11 @@ class MainActivity : AppCompatActivity() {
         val button: Button = findViewById(R.id.ingresar_btn)
 
         button.setOnClickListener{
-            Toast.makeText(this,"Dirigiendo al main",Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, LoadingScreenActivity::class.java)
+            Toast.makeText(this,"Empezando carga..",Toast.LENGTH_SHORT).show()
+            startActivity(intent)
+            finish()
         }
     }
 }

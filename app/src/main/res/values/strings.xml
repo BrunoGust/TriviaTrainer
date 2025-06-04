@@ -5,4 +5,6 @@
     <string name="ingresar_btn"> > Ingresar </string>
     <string name="salir_btn"> > Salir </string>
     <string name="nuevo_quizz">NUEVO QUIZ</string>
+    <string name="generar_quiz"> > GENERAR QUIZ </string>
+    <string name="planceholder_tema">ej: Sistema Solar, Historia Antigua...</string>
 </resources>
