@@ -7,4 +7,6 @@
     <string name="nuevo_quizz">NUEVO QUIZ</string>
     <string name="generar_quiz"> > GENERAR QUIZ </string>
     <string name="planceholder_tema">ej: Sistema Solar, Historia Antigua...</string>
+    <string name="_00_00">00:00</string>
+    <string name="quiz_de_conocimiento">QUIZ DE CONOCIMIENTO</string>
 </resources>
