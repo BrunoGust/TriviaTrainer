@@ -31,14 +31,16 @@
                 android:id="@+id/textViewsaludoQuiz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/vt323"
                 android:text="Saludos, USUARIO!"
                 android:textColor="@color/text_color"
-                android:textSize="16dp" />
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/buttonSalirQuiz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/vt323"
                 android:layout_marginLeft="50dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_border_green"
@@ -60,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="start"
-                android:text="@string/tiempo"
+                android:text="Tiempo:"
                 android:textColor="@color/text_color"
                 android:textSize="25sp"
                 android:fontFamily="@font/vt323"
@@ -104,6 +106,7 @@
             android:id="@+id/layoutPregunta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/vt323"
             android:layout_marginTop="24dp"
             android:background="@color/background_color"
             android:foreground="@drawable/button_border_green"
@@ -114,10 +117,10 @@
                 android:id="@+id/textViewPregunta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
                 android:fontFamily="@font/vt323"
+                android:layout_marginTop="24dp"
                 android:gravity="center"
-                android:text="¿Cuál es la capital de Perú?"
+                android:text="P1: ¿Cuál es la capital de Perú?"
                 android:textColor="@color/text_color"
                 android:textSize="22sp" />
 
@@ -126,10 +129,12 @@
                 android:id="@+id/buttonRespuesta1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/vt323"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/button_border_green"
                 android:foreground="@drawable/button_border_green"
-                android:text="Lima"
+                android:gravity="left"
+                android:text="a) Lima"
                 android:textColor="@color/text_color"
                 android:textSize="20sp" />
 
@@ -138,10 +143,12 @@
                 android:id="@+id/buttonRespuesta2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/vt323"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/button_border_green"
                 android:foreground="@drawable/button_border_green"
-                android:text="Cusco"
+                android:gravity="left"
+                android:text="b) Cusco"
                 android:textColor="@color/text_color"
                 android:textSize="20sp" />
 
@@ -150,10 +157,12 @@
                 android:id="@+id/buttonRespuesta3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/vt323"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/button_border_green"
                 android:foreground="@drawable/button_border_green"
-                android:text="Arequipa"
+                android:gravity="left"
+                android:text="c) Arequipa"
                 android:textColor="@color/text_color"
                 android:textSize="20sp" />
 
@@ -162,12 +171,51 @@
                 android:id="@+id/buttonRespuesta4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/vt323"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/button_border_green"
                 android:foreground="@drawable/button_border_green"
-                android:text="Trujillo"
+                android:gravity="left"
+                android:text="d) Trujillo"
                 android:textColor="@color/text_color"
                 android:textSize="20sp" />
         </LinearLayout>
+        <!-- Layout boton configuracion y sgte pregunta-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="45dp"
+            android:gravity="center_vertical"
+            android:weightSum="10">
+
+            <!-- Botón de configuracion-->
+            <ImageButton
+                android:id="@+id/buttonHelp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/help_24px"
+                android:layout_weight="2"
+                android:background="@null"
+                app:tint="#00FF11"
+                android:contentDescription="boton de ayuda" />
+
+
+            <!-- Botón siguiente pregunta-->
+            <Button
+                android:id="@+id/buttonSiguientePregunta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vt323"
+                android:layout_weight="8"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/button_border_green"
+                android:foreground="@drawable/button_border_green"
+                android:text="> SIGUIENTE PREGUNTA"
+                android:textColor="@color/text_color"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
