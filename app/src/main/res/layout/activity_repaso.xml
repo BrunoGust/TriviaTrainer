@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".RepasoActivity">
+
+    <LinearLayout
+        android:layout_width="376dp"
+        android:layout_height="798dp"
+        android:background="@drawable/border_background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.9">
+
+        <LinearLayout
+            android:id="@+id/fragmentContainerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saludos, USUARIO!"
+                android:textColor="@color/text_color"
+                android:textSize="16dp" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_border_green"
+                android:foreground="@drawable/button_border_green"
+                android:text="@string/salir_btn"
+                android:textColor="@color/text_color"
+                android:textSize="25sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="87dp"
+            android:layout_marginTop="45dp"
+            android:fontFamily="@font/vt323"
+            android:gravity="center|center_horizontal"
+            android:shadowColor="@color/text_color"
+            android:shadowDx="15"
+            android:shadowDy="15"
+            android:shadowRadius="25"
+            android:text="Info de repaso"
+            android:textColor="@color/text_color"
+            android:textSize="48sp" />
+
+        <EditText
+            android:id="@+id/editTextText"
+            android:layout_width="match_parent"
+            android:layout_height="331dp"
+            android:layout_marginTop="20sp"
+            android:background="@drawable/edittext_border_green"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:text="@string/texto_prueba"
+            android:textColor="#7E7D7D" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="292dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:layout_marginBottom="20sp"
+            android:fontFamily="@font/vt323"
+            android:text="¿Listo para empezar? :)"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="28sp" />
+
+        <Button
+            android:id="@+id/ingresar_btn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40sp"
+            android:background="@drawable/button_border_green"
+            android:fontFamily="@font/vt323"
+            android:foreground="@drawable/button_border_green"
+            android:gravity="center"
+            android:shadowColor="@color/text_color"
+            android:shadowDx="10"
+            android:shadowDy="10"
+            android:shadowRadius="25"
+            android:text="> Empezar Quiz!"
+            android:textColor="@color/text_color"
+            android:textSize="35sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

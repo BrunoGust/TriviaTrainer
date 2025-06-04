@@ -4,9 +4,19 @@
     <string name="usuario_pass">CLAVE:</string>
     <string name="ingresar_btn"> > Ingresar </string>
     <string name="salir_btn"> > Salir </string>
+    <string name="tiempo">  Tiempo: </string>
     <string name="nuevo_quizz">NUEVO QUIZ</string>
     <string name="generar_quiz"> > GENERAR QUIZ </string>
     <string name="planceholder_tema">ej: Sistema Solar, Historia Antigua...</string>
     <string name="_00_00">00:00</string>
     <string name="quiz_de_conocimiento">QUIZ DE CONOCIMIENTO</string>
+    <string name="texto_prueba">Tema: Segunda Guerra Mundial\nLa Segunda Guerra Mundial fue un conflicto
+        global que tuvo lugar entre 1939 y 1945,\n\n\n involucrando a la mayoría de las naciones del mundo.
+        Fue causada principalmente por las tensiones políticas, \n\neconómicas y territoriales tras la Primera Guerra Mundial.
+        Las principales\nLorem Ipsum has been the industrynly five centuries, but also the leap into electronic typesetting,
+        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+        he 1960s with the release of Letraset sheets containingwith desktop publishing software like with desktop publishing software like
+        Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
+        Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
+        of Lorem Ipsum.</string>
 </resources>
