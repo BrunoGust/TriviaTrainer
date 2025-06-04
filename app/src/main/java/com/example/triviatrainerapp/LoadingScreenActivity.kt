@@ -38,6 +38,9 @@ class LoadingScreenActivity : AppCompatActivity() {
         val destinationClassName = intent.getStringExtra(EXTRA_DESTINATION_ACTIVITY_CLASS)
         val username = intent.getStringExtra(MainActivity.EXTRA_USERNAME)
 
+        val resumen = intent.getStringExtra("RESUMEN_GENERADO")
+        val tema = intent.getStringExtra("TEMA_ORIGINAL")
+
         Handler(Looper.getMainLooper()).postDelayed({
             if (destinationClassName != null) {
                 try {
@@ -47,6 +50,12 @@ class LoadingScreenActivity : AppCompatActivity() {
                         if (username != null) {
                             putExtra(MainActivity.EXTRA_USERNAME, username)
                         }
+
+                        if (resumen != null) {
+                            putExtra("RESUMEN_GENERADO", resumen)
+                            putExtra("TEMA_ORIGINAL", tema)
+                        }
+
                     }
                     startActivity(intent)
                 } catch (e: ClassNotFoundException) {

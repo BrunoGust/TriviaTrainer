@@ -75,10 +75,15 @@
             android:layout_height="331dp"
             android:layout_marginTop="20sp"
             android:background="@drawable/edittext_border_green"
+            android:editable="false"
+            android:cursorVisible="false"
+            android:textIsSelectable="true"
+            android:autoLink="web"
+            android:text="@string/texto_prueba"
+            android:longClickable="true"
+            android:clickable="true"
             android:ems="10"
             android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:text="@string/texto_prueba"
             android:textColor="#7E7D7D" />
 
         <TextView

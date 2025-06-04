@@ -3,6 +3,7 @@ package com.example.triviatrainerapp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -23,6 +24,13 @@ class RepasoActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }*/
+
+        val resumen = intent.getStringExtra("RESUMEN_GENERADO") ?: "Resumen no disponible"
+        val tema = intent.getStringExtra("TEMA_ORIGINAL") ?: ""
+
+        val editText = findViewById<EditText>(R.id.editTextText)
+        editText.setText(resumen)
+
 
         val button: Button = findViewById(R.id.btnEmpezarQuiz)
         welcomeTextView = findViewById(R.id.textView4)

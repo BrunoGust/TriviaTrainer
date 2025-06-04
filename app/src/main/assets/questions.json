@@ -1,38 +1,38 @@
 [
   {
     "id": 1,
-    "pregunta": "¿Cuál es la capital de Perú?",
-    "opciones": ["Arequipa", "Lima", "Cusco", "Trujillo"],
-    "respuesta_correcta": 1
+    "pregunta": "¿En qué año comenzó la Segunda Guerra Mundial?",
+    "opciones": ["1935", "1937", "1939", "1941"],
+    "respuesta_correcta": 2
   },
   {
     "id": 2,
-    "pregunta": "¿En qué continente está Perú?",
-    "opciones": ["África", "Asia", "Sudamérica", "Europa"],
-    "respuesta_correcta": 2
-  },
-  {
-    "id": 3,
-    "pregunta": "¿Qué océano está al oeste del Perú?",
-    "opciones": ["Atlántico", "Índico", "Pacífico", "Ártico"],
-    "respuesta_correcta": 2
-  },
-  {
-    "id": 4,
-    "pregunta": "¿Cuál es el ave nacional del Perú?",
-    "opciones": ["Cóndor", "Gallito de las Rocas", "Flamenco", "Pato"],
+    "pregunta": "¿Qué países formaban parte del Eje?",
+    "opciones": ["EE.UU., Francia y Reino Unido", "Alemania, Italia y Japón", "URSS, China y Francia", "Reino Unido, Canadá y EE.UU."],
     "respuesta_correcta": 1
   },
   {
-    "id": 5,
-    "pregunta": "¿Qué antigua civilización construyó Machu Picchu?",
-    "opciones": ["Mayas", "Aztecas", "Incas", "Olmecas"],
+    "id": 3,
+    "pregunta": "¿Cuál fue el detonante del inicio de la Segunda Guerra Mundial?",
+    "opciones": ["La invasión de Polonia", "El ataque a Pearl Harbor", "La guerra civil española", "El Tratado de Versalles"],
+    "respuesta_correcta": 0
+  },
+  {
+    "id": 4,
+    "pregunta": "¿Qué ciudad fue bombardeada con la primera bomba atómica?",
+    "opciones": ["Nagasaki", "Tokio", "Hiroshima", "Osaka"],
     "respuesta_correcta": 2
   },
   {
+    "id": 5,
+    "pregunta": "¿Quién fue el líder del Reino Unido durante gran parte de la Segunda Guerra Mundial?",
+    "opciones": ["Neville Chamberlain", "Winston Churchill", "Franklin D. Roosevelt", "Joseph Stalin"],
+    "respuesta_correcta": 1
+  },
+  {
     "id": 6,
-    "pregunta": "¿Cuál es la moneda oficial del Perú?",
-    "opciones": ["Peso", "Dólar", "Sol", "Real"],
+    "pregunta": "¿En qué año terminó la Segunda Guerra Mundial?",
+    "opciones": ["1943", "1944", "1945", "1946"],
     "respuesta_correcta": 2
   }
 ]
