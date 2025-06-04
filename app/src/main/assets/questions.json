@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "pregunta": "¿Cuál es la capital de Perú?",
+    "opciones": ["Arequipa", "Lima", "Cusco", "Trujillo"],
+    "respuesta_correcta": 1
+  },
+  {
+    "id": 2,
+    "pregunta": "¿En qué continente está Perú?",
+    "opciones": ["África", "Asia", "Sudamérica", "Europa"],
+    "respuesta_correcta": 2
+  },
+  {
+    "id": 3,
+    "pregunta": "¿Qué océano está al oeste del Perú?",
+    "opciones": ["Atlántico", "Índico", "Pacífico", "Ártico"],
+    "respuesta_correcta": 2
+  },
+  {
+    "id": 4,
+    "pregunta": "¿Cuál es el ave nacional del Perú?",
+    "opciones": ["Cóndor", "Gallito de las Rocas", "Flamenco", "Pato"],
+    "respuesta_correcta": 1
+  },
+  {
+    "id": 5,
+    "pregunta": "¿Qué antigua civilización construyó Machu Picchu?",
+    "opciones": ["Mayas", "Aztecas", "Incas", "Olmecas"],
+    "respuesta_correcta": 2
+  },
+  {
+    "id": 6,
+    "pregunta": "¿Cuál es la moneda oficial del Perú?",
+    "opciones": ["Peso", "Dólar", "Sol", "Real"],
+    "respuesta_correcta": 2
+  }
+]
