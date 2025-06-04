@@ -61,8 +61,9 @@
             android:ems="10"
             android:hint=" "
             android:inputType="text"
-            android:textColor="@color/text_color"
+            android:textColor="@color/white"
             android:fontFamily="@font/vt323"
+            android:textSize="30sp"
             />
 
         <TextView
@@ -89,6 +90,7 @@
             android:inputType="textPassword"
             android:textColorHint="#9900FF00"
             android:fontFamily="@font/vt323"
+            android:textSize="30sp"
             />
 
         <Button
@@ -96,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40sp"
-            android:background="@drawable/button_border_green"
+            android:background="@drawable/generic_button_selector"
             android:fontFamily="@font/vt323"
             android:foreground="@drawable/button_border_green"
             android:gravity="center"

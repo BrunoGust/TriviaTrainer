@@ -21,8 +21,12 @@ class MainActivity : AppCompatActivity() {
 
         button.setOnClickListener{
 
-            val intent = Intent(this, LoadingScreenActivity::class.java)
-            Toast.makeText(this,"Empezando carga..",Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, LoadingScreenActivity::class.java).apply {
+                // Pasa el nombre de la clase de destino como un extra
+                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
+                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "INICIANDO SESIÓN...")
+            }
+            //Toast.makeText(this,"Empezando carga..",Toast.LENGTH_SHORT).show()
             startActivity(intent)
             finish()
         }

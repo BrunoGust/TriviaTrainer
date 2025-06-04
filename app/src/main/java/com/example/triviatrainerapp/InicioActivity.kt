@@ -70,12 +70,13 @@ class InicioActivity : AppCompatActivity() {
         generateQuizButton.setOnClickListener {
             val theme = editTextTheme.text.toString().trim()
             if (theme.isNotEmpty()) {
-                Toast.makeText(this, "Generando quiz sobre: $theme", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Generando quiz sobre: $theme", Toast.LENGTH_SHORT).show()
                 // Aquí es donde llamarías a tu pantalla de carga
-                val loadingIntent = Intent(
-                    this,
-                    RepasoActivity::class.java
-                ) // Asegúrate que esta clase exista y esté en el paquete correcto
+                val loadingIntent = Intent(this, LoadingScreenActivity::class.java).apply {
+                    putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, QuizActivity2::class.java.name)
+                    // También podrías pasar el 'theme' si lo necesitas en la siguiente Activity
+                    putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO QUIZ...")
+                } // Asegúrate que esta clase exista y esté en el paquete correcto
                 startActivity(loadingIntent)
                 // No llames finish() aquí si quieres que InicioActivity permanezca en la pila
             } else {
