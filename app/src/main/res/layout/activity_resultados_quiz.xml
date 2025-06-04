@@ -91,75 +91,12 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-                <!-- Ejemplo de resultado correcto -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:padding="12dp"
-                    android:background="#C8E6C9"
-                android:text="P1: ¿En qué año llegó Cristóbal Colón a América? \n Tu respuesta: 1492"
-                android:textColor="#004D00"
-                android:textSize="18sp"
-                android:fontFamily="@font/vt323" />
-
-                <!-- Ejemplo de resultado incorrecto -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:padding="12dp"
-                    android:background="#FFCDD2"
-                    android:text="P2: ¿Quién fue el primer gobernador español del Perú después de la conquista? \n Tu respuesta: Cristobal Colón"
-                android:textColor="#B00020"
-                android:textSize="18sp"
-                android:fontFamily="@font/vt323" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:padding="12dp"
-                    android:background="#FFCDD2"
-                    android:text="P3: ¿Qué ciudad fue la capital del Imperio Inca antes de Lima? \n Tu respuesta: Arequipa"
-                    android:textColor="#B00020"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/vt323" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:padding="12dp"
-                    android:background="#FFCDD2"
-                    android:text="P4: ¿Qué reina financió el viaje de Cristóbal Colón en 1492? \n Tu respuesta: Isabel de Portugal"
-                    android:textColor="#B00020"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/vt323" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:padding="12dp"
-                    android:background="#FFCDD2"
-                    android:text="P5: ¿Cuál fue la primera isla en la que llegó Cristóbal Colón en América? \n Tu respuesta: Cuba"
-                    android:textColor="#B00020"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/vt323" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:padding="12dp"
-                    android:background="#FFCDD2"
-                    android:text="P6: ¿En qué año se fundó oficialmente la ciudad de Lima? \n Tu respuesta: 1525"
-                    android:textColor="#B00020"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/vt323" />
             </LinearLayout>
         </ScrollView>
 
 
 
-                <!-- Botón nuevo quiz-->
+                <!-- Botón pedir mas informacion-->
                 <Button
                     android:id="@+id/buttonNuevoQuiz"
                     android:layout_width="wrap_content"
@@ -169,7 +106,7 @@
                     android:fontFamily="@font/vt323"
                     android:background="@drawable/generic_button_selector"
                     android:foreground="@drawable/button_border_green"
-                    android:text="> INTENTAR DE NUEVO"
+                    android:text="> PROFUNDIZAR MÁS"
                     android:textColor="@color/text_color"
                     android:textSize="24sp" />
 
@@ -191,7 +128,7 @@
                 android:background="@null"
                 app:tint="#00FF11"
                 android:contentDescription="boton de ayuda" />
-            <!-- Botón de INTENTAR DE NUEVO-->
+            <!-- Botón de Nuevo Quiz-->
         <Button
             android:id="@+id/buttonSiguientePreguntaResultados"
             android:layout_width="0dp"

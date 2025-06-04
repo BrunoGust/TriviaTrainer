@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vt323"
-                android:text="Saludos, USUARIO!"
+                android:text="BUENA SUERTE!"
                 android:textColor="@color/text_color"
                 android:textSize="20dp" />
 
