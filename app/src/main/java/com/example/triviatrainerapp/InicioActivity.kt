@@ -8,6 +8,7 @@ import android.speech.SpeechRecognizer
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -21,8 +22,9 @@ class InicioActivity : AppCompatActivity() {
     private lateinit var editTextTheme: EditText
     private lateinit var voiceButton: ImageButton
     private lateinit var generateQuizButton: Button
-
+    private lateinit var welcomeTextView: TextView
     private lateinit var speechRecognizerLauncher: ActivityResultLauncher<Intent>
+    private lateinit var salirBtn: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,17 @@ class InicioActivity : AppCompatActivity() {
         editTextTheme = findViewById(R.id.input_tema)
         voiceButton = findViewById(R.id.voz_btn)
         generateQuizButton = findViewById(R.id.generar_quiz_btn)
+        welcomeTextView = findViewById(R.id.textView4)
+        salirBtn = findViewById(R.id.salir_btn)
+
+        val username = intent.getStringExtra(MainActivity.EXTRA_USERNAME)
+        if (username != null && username.isNotEmpty()) {
+            welcomeTextView.text = "Saludos, $username!" // Actualizar el texto
+        } else {
+            welcomeTextView.text = "Saludos, USUARIO!" // O mantener el por defecto si no hay nombre
+        }
+
+
 
         // 2. Inicializar el lanzador de resultados de reconocimiento de voz
         speechRecognizerLauncher =
@@ -73,9 +86,10 @@ class InicioActivity : AppCompatActivity() {
                 //Toast.makeText(this, "Generando quiz sobre: $theme", Toast.LENGTH_SHORT).show()
                 // Aquí es donde llamarías a tu pantalla de carga
                 val loadingIntent = Intent(this, LoadingScreenActivity::class.java).apply {
-                    putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, QuizActivity2::class.java.name)
+                    putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, RepasoActivity::class.java.name)
                     // También podrías pasar el 'theme' si lo necesitas en la siguiente Activity
-                    putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO QUIZ...")
+                    putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO INFORMACION...")
+                    putExtra(MainActivity.EXTRA_USERNAME,username)
                 } // Asegúrate que esta clase exista y esté en el paquete correcto
                 startActivity(loadingIntent)
                 // No llames finish() aquí si quieres que InicioActivity permanezca en la pila
@@ -83,6 +97,16 @@ class InicioActivity : AppCompatActivity() {
                 Toast.makeText(this, "Por favor, ingresa o indica un tema.", Toast.LENGTH_SHORT)
                     .show()
             }
+        }
+
+        salirBtn.setOnClickListener {
+            val exitIntent = Intent(this, LoadingScreenActivity::class.java).apply {
+                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, MainActivity::class.java.name)
+                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Te extrañaremos $username :(\nCERRANDO SESION...")
+            }
+            startActivity(exitIntent)
+            finish()
+
         }
 
 

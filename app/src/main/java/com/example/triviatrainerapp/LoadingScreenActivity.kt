@@ -36,12 +36,18 @@ class LoadingScreenActivity : AppCompatActivity() {
 
         val loadingTimeMillis: Long = 3000 // 3 segundos (ajusta esto)
         val destinationClassName = intent.getStringExtra(EXTRA_DESTINATION_ACTIVITY_CLASS)
+        val username = intent.getStringExtra(MainActivity.EXTRA_USERNAME)
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (destinationClassName != null) {
                 try {
                     val destinationClass = Class.forName(destinationClassName)
-                    val intent = Intent(this, destinationClass)
+                    val intent = Intent(this, destinationClass).apply {
+                        // **Nuevo: Pasa el nombre de usuario al nuevo Intent para la Activity de destino**
+                        if (username != null) {
+                            putExtra(MainActivity.EXTRA_USERNAME, username)
+                        }
+                    }
                     startActivity(intent)
                 } catch (e: ClassNotFoundException) {
                     e.printStackTrace()

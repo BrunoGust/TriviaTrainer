@@ -39,7 +39,7 @@
                 android:textSize="20dp" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/salir_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
@@ -111,9 +111,9 @@
                 android:fontFamily="@font/vt323"
                 android:gravity="center"
                 android:paddingEnd="10dp"
-                android:text="MANTEN PRESIONADO PARA INGRESAR UN TEMA"
+                android:text="PRESIONA PARA INGRESAR UN TEMA"
                 android:textColor="@color/text_color"
-                android:textSize="20sp" />
+                android:textSize="21sp" />
 
             <ImageButton
                 android:id="@+id/voz_btn"
