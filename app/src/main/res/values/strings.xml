@@ -5,4 +5,7 @@
     <string name="ingresar_btn"> > Ingresar </string>
     <string name="salir_btn"> > Salir </string>
     <string name="nuevo_quizz">NUEVO QUIZ</string>
+    <string name="tiempo">Tiempo:</string>
+    <string name="_00_00">00:00</string>
+    <string name="quiz_de_conocimiento">QUIZ DE CONOCIMIENTO</string>
 </resources>
