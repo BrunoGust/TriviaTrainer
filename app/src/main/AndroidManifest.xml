@@ -15,6 +15,9 @@
         android:theme="@style/Theme.TriviaTrainerApp"
         tools:targetApi="31">
         <activity
+            android:name=".ResultadosQuizActivity"
+            android:exported="false" />
+        <activity
             android:name=".RepasoActivity"
             android:exported="false" />
         <activity

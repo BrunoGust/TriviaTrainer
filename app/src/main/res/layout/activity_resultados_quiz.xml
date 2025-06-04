@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ResultadosQuizActivity"
+    android:background="@color/background_color">
+    <LinearLayout
+        android:layout_width="376dp"
+        android:layout_height="798dp"
+        android:background="@drawable/border_background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.9">
+        <LinearLayout
+            android:id="@+id/fragmentContainerViewQuiz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textViewsaludoQuizResultados"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vt323"
+                android:text="Saludos, USUARIO!"
+                android:textColor="@color/text_color"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/buttonSalirQuizResultados"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vt323"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_border_green"
+                android:foreground="@drawable/button_border_green"
+                android:text="@string/salir_btn"
+                android:textColor="@color/text_color"
+                android:textSize="25sp" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/textViewTituloQuiz"
+            android:layout_width="match_parent"
+            android:layout_height="87dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/vt323"
+            android:gravity="center|center_horizontal"
+            android:shadowColor="@color/text_color"
+            android:shadowDx="15"
+            android:shadowDy="15"
+            android:shadowRadius="25"
+            android:text="RESULTADOS DEL QUIZ"
+            android:textColor="@color/text_color"
+            android:textSize="32sp" />
+        <TextView
+            android:id="@+id/textViewCantidadCorrectas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/vt323"
+            android:gravity="center"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="OBTUVISTE 1 DE 6 CORRECTAS!"
+            android:textColor="#90EE90"
+            android:textSize="20sp" />
+        <ScrollView
+            android:id="@+id/scrollResultados"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginTop="16dp"
+            android:fillViewport="true">
+            <!-- BLOQUE DE RESULTADOS-->
+            <LinearLayout
+                android:id="@+id/layoutResultados"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <!-- Ejemplo de resultado correcto -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:padding="12dp"
+                    android:background="#C8E6C9"
+                android:text="P1: ¿En qué año llegó Cristóbal Colón a América? \n Tu respuesta: 1492"
+                android:textColor="#004D00"
+                android:textSize="18sp"
+                android:fontFamily="@font/vt323" />
+
+                <!-- Ejemplo de resultado incorrecto -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:padding="12dp"
+                    android:background="#FFCDD2"
+                    android:text="P2: ¿Quién fue el primer gobernador español del Perú después de la conquista? \n Tu respuesta: Cristobal Colón"
+                android:textColor="#B00020"
+                android:textSize="18sp"
+                android:fontFamily="@font/vt323" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:padding="12dp"
+                    android:background="#FFCDD2"
+                    android:text="P3: ¿Qué ciudad fue la capital del Imperio Inca antes de Lima? \n Tu respuesta: Arequipa"
+                    android:textColor="#B00020"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/vt323" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:padding="12dp"
+                    android:background="#FFCDD2"
+                    android:text="P4: ¿Qué reina financió el viaje de Cristóbal Colón en 1492? \n Tu respuesta: Isabel de Portugal"
+                    android:textColor="#B00020"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/vt323" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:padding="12dp"
+                    android:background="#FFCDD2"
+                    android:text="P5: ¿Cuál fue la primera isla en la que llegó Cristóbal Colón en América? \n Tu respuesta: Cuba"
+                    android:textColor="#B00020"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/vt323" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:padding="12dp"
+                    android:background="#FFCDD2"
+                    android:text="P6: ¿En qué año se fundó oficialmente la ciudad de Lima? \n Tu respuesta: 1525"
+                    android:textColor="#B00020"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/vt323" />
+            </LinearLayout>
+        </ScrollView>
+
+
+
+                <!-- Botón nuevo quiz-->
+                <Button
+                    android:id="@+id/buttonNuevoQuiz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="45dp"
+                    android:layout_gravity="right"
+                    android:fontFamily="@font/vt323"
+                    android:background="@drawable/button_border_green"
+                    android:foreground="@drawable/button_border_green"
+                    android:text="> INTENTAR DE NUEVO"
+                    android:textColor="@color/text_color"
+                    android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:weightSum="10">
+
+            <!-- Botón de ayuda-->
+            <ImageButton
+                android:id="@+id/buttonHelpResultados"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/help_24px"
+                android:layout_weight="2.5"
+                android:background="@null"
+                app:tint="#00FF11"
+                android:contentDescription="boton de ayuda" />
+            <!-- Botón de INTENTAR DE NUEVO-->
+        <Button
+            android:id="@+id/buttonSiguientePreguntaResultados"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vt323"
+            android:layout_weight="7.5"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/button_border_green"
+            android:foreground="@drawable/button_border_green"
+            android:text="> NUEVO QUIZ"
+            android:textColor="@color/text_color"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
