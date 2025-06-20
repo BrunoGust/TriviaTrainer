@@ -28,18 +28,18 @@
             android:id="@+id/fragmentContainerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
+            <!-- Botón saludos usuario -->
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/saludo_usuario_inicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vt323"
                 android:text="Saludos, USUARIO!"
                 android:textColor="@color/text_color"
                 android:textSize="20dp" />
-
+            <!-- Botón cerrar sesion -->
             <Button
-                android:id="@+id/salir_btn"
+                android:id="@+id/cerrar_sesion_inicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
@@ -47,14 +47,14 @@
                 android:background="@drawable/generic_button_selector"
                 android:fontFamily="@font/vt323"
                 android:foreground="@drawable/button_border_green"
-                android:text="@string/salir_btn"
+                android:text="> Cerrar Sesión"
                 android:textColor="@color/text_color"
-                android:textSize="25sp" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewNuevoQuiz"
             android:layout_width="match_parent"
             android:layout_height="87dp"
             android:layout_marginTop="45dp"
@@ -69,7 +69,7 @@
             android:textSize="64sp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textViewIndicacionesNuevoQuiz"
             android:layout_width="332dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="70sp"
@@ -127,18 +127,44 @@
                 android:src="@drawable/icon_microphono_white" />
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/generar_quiz_btn"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60sp"
-            android:background="@drawable/generic_button_selector"
-            android:fontFamily="@font/vt323"
-            android:foreground="@drawable/button_border_green"
-            android:text="@string/generar_quiz"
-            android:textColor="@color/text_color"
-            android:textSize="40dp" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:weightSum="10">
+
+            <!-- Botón de ayuda contextual inicio -->
+            <ImageButton
+                android:id="@+id/buttonHelpInicio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/help_24px"
+                android:background="@null"
+                app:tint="#00FF11"
+                android:contentDescription="boton de ayuda" />
+
+            <!-- Botón generar quiz -->
+            <Button
+                android:id="@+id/generar_quiz_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:gravity="left"
+                android:background="@drawable/generic_button_selector"
+                android:fontFamily="@font/vt323"
+                android:foreground="@drawable/button_border_green"
+                android:text="@string/generar_quiz"
+                android:textColor="@color/text_color"
+                android:textSize="36sp" />
+        </LinearLayout>
+
+
+
 
     </LinearLayout>
 
