@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         }*/
         val button: Button = findViewById(R.id.ingresar_btn)
         val usuarioInput: EditText = findViewById(R.id.usuario_input)
+        val registrar_btn: Button = findViewById(R.id.registrar_btn)
 
         button.setOnClickListener{
             val username = usuarioInput.text.toString().trim() // Obtener el texto del EditText del usuario
@@ -38,6 +39,12 @@ class MainActivity : AppCompatActivity() {
                 putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "INICIANDO SESIÓN...")
                 putExtra(EXTRA_USERNAME, username)
             }
+            //Toast.makeText(this,"Empezando carga..",Toast.LENGTH_SHORT).show()
+            startActivity(intent)
+            finish()
+        }
+        registrar_btn.setOnClickListener{
+            val intent = Intent(this, RegistroActivity::class.java)
             //Toast.makeText(this,"Empezando carga..",Toast.LENGTH_SHORT).show()
             startActivity(intent)
             finish()

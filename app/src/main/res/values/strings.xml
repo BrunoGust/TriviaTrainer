@@ -2,7 +2,7 @@
     <string name="app_name">TriviaTrainerApp</string>
     <string name="usuario_label">USUARIO:</string>
     <string name="usuario_pass">CLAVE:</string>
-    <string name="ingresar_btn"> > Ingresar </string>
+    <string name="ingresar_btn"> > INGRESAR </string>
     <string name="salir_btn"> > Salir </string>
     <string name="tiempo">  Tiempo: </string>
     <string name="nuevo_quizz">NUEVO QUIZ</string>
@@ -19,6 +19,11 @@
         Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
         Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
         of Lorem Ipsum.\nLinks de búsqueda: \nhttps://es.wikipedia.org/wiki/Segunda_Guerra_Mundial
-
     </string>
+
+
+
+    <string name="email_label">EMAIL: </string>
+    <string name="registrar_btn"> > REGISTRAR </string>
+    <string name="confirmar_clave_label">CONFIRMA CLAVE</string>
 </resources>
