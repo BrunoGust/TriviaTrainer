@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,7 +11,10 @@ plugins {
 android {
     namespace = "com.example.triviatrainerapp"
     compileSdk = 35
-
+    // Leer apiKey desde apikey.properties
+    val apikeyPropsFile = rootProject.file("apikey.properties")
+    val apikeyProps = Properties()
+    apikeyProps.load(apikeyPropsFile.inputStream())
     defaultConfig {
         applicationId = "com.example.triviatrainerapp"
         minSdk = 24
@@ -18,6 +23,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Inserta la apiKey como BuildConfig.API_KEY
+        buildConfigField("String", "API_KEY", "\"${apikeyProps["API_KEY"]}\"")
     }
 
     buildTypes {
@@ -42,6 +49,9 @@ android {
                 srcDirs("src/main/assets")
             }
         }
+    }
+    buildFeatures{
+        buildConfig = true
     }
 }
 
