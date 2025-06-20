@@ -78,7 +78,7 @@ class InicioActivity : AppCompatActivity() {
 
     val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash",
-        apiKey = "TuApiKEY",
+        apiKey = com.example.triviatrainerapp.BuildConfig.API_KEY,
         generationConfig = config,
         safetySettings = listOf(
             SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.LOW_AND_ABOVE),
@@ -114,7 +114,7 @@ class InicioActivity : AppCompatActivity() {
         // 2. Inicializar el lanzador de resultados de reconocimiento de voz
         speechRecognizerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
+                if (result.resultCode == RESULT_OK) {
                     val data: Intent? = result.data
                     val recognizedText: ArrayList<String>? = data?.getStringArrayListExtra(
                         RecognizerIntent.EXTRA_RESULTS
@@ -128,7 +128,7 @@ class InicioActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                } else if (result.resultCode == Activity.RESULT_CANCELED) {
+                } else if (result.resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "Reconocimiento de voz cancelado.", Toast.LENGTH_SHORT)
                         .show()
                 } else {

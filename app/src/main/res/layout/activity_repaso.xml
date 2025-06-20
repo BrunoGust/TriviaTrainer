@@ -47,7 +47,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_border_green"
                 android:foreground="@drawable/button_border_green"
-                android:text="@string/salir_btn"
+                android:text="> Volver"
                 android:textColor="@color/text_color"
                 android:fontFamily="@font/vt323"
                 android:textSize="25sp" />
@@ -98,22 +98,45 @@
             android:textColor="@color/text_color"
             android:textSize="28sp" />
 
-        <Button
-            android:id="@+id/btnEmpezarQuiz"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40sp"
-            android:background="@drawable/button_border_green"
-            android:fontFamily="@font/vt323"
-            android:foreground="@drawable/button_border_green"
-            android:gravity="center"
-            android:shadowColor="@color/text_color"
-            android:shadowDx="10"
-            android:shadowDy="10"
-            android:shadowRadius="25"
-            android:text="> Empezar Quiz!"
-            android:textColor="@color/text_color"
-            android:textSize="35sp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:weightSum="10">
+
+            <!-- Botón de ayuda contextual repaso -->
+            <ImageButton
+                android:id="@+id/buttonHelpRepaso"
+                android:layout_width="24dp"
+                android:layout_height="48dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/help_24px"
+                android:scaleType="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="#00FF11"
+                android:contentDescription="Botón de ayuda" />
+
+            <!-- Botón empezar quiz -->
+            <Button
+                android:id="@+id/btnEmpezarQuiz"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:background="@drawable/generic_button_selector"
+                android:foreground="@drawable/generic_button_selector"
+                android:fontFamily="@font/vt323"
+                android:gravity="center"
+                android:text="> Empezar Quiz!"
+                android:textColor="@color/text_color"
+                android:textSize="28sp" />
+        </LinearLayout>
 
     </LinearLayout>
 
