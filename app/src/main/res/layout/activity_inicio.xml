@@ -30,7 +30,7 @@
             android:layout_height="wrap_content">
             <!-- Botón saludos usuario -->
             <TextView
-                android:id="@+id/saludo_usuario_inicio"
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vt323"
@@ -39,7 +39,7 @@
                 android:textSize="20dp" />
             <!-- Botón cerrar sesion -->
             <Button
-                android:id="@+id/cerrar_sesion_inicio"
+                android:id="@+id/salir_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
@@ -139,14 +139,18 @@
             <!-- Botón de ayuda contextual inicio -->
             <ImageButton
                 android:id="@+id/buttonHelpInicio"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="48dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/help_24px"
-                android:background="@null"
+                android:scaleType="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="#00FF11"
-                android:contentDescription="boton de ayuda" />
+                android:contentDescription="Botón de ayuda" />
+
 
             <!-- Botón generar quiz -->
             <Button
@@ -160,7 +164,7 @@
                 android:foreground="@drawable/button_border_green"
                 android:text="@string/generar_quiz"
                 android:textColor="@color/text_color"
-                android:textSize="36sp" />
+                android:textSize="32sp" />
         </LinearLayout>
 
 

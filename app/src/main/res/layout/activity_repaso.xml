@@ -111,15 +111,17 @@
             <!-- Botón de ayuda contextual repaso -->
             <ImageButton
                 android:id="@+id/buttonHelpRepaso"
-                android:layout_width="0dp"
+                android:layout_width="24dp"
                 android:layout_height="48dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/help_24px"
                 android:scaleType="center"
-                android:background="@null"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="#00FF11"
-                android:contentDescription="botón de ayuda" />
+                android:contentDescription="Botón de ayuda" />
 
             <!-- Botón empezar quiz -->
             <Button
@@ -133,7 +135,7 @@
                 android:gravity="center"
                 android:text="> Empezar Quiz!"
                 android:textColor="@color/text_color"
-                android:textSize="32sp" />
+                android:textSize="28sp" />
         </LinearLayout>
 
     </LinearLayout>
