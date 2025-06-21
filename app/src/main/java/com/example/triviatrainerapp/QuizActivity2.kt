@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import java.io.File
 
 class QuizActivity2 : AppCompatActivity() {
     private val respuestasUsuario = mutableListOf<RespuestaUsuario>()
@@ -127,12 +128,18 @@ class QuizActivity2 : AppCompatActivity() {
 
         opcionSeleccionada = null
     }
+
     // carga de la carpeta assets
     private fun cargarPreguntasDesdeJSON(): List<Pregunta> {
-        val inputStream = assets.open("questions.json")
-        val json = inputStream.bufferedReader().use { it.readText() }
+        val archivo = File(filesDir, "questions.json")
+        if (!archivo.exists()) {
+            Toast.makeText(this, "No se encontró el archivo de preguntas.", Toast.LENGTH_LONG).show()
+            return emptyList()
+        }
+        val json = archivo.readText()
         val tipo = object : TypeToken<List<Pregunta>>() {}.type
         return Gson().fromJson(json, tipo)
     }
+
 
 }
