@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.File
 
 class ResultadosQuizActivity : AppCompatActivity() {
 
@@ -16,7 +17,8 @@ class ResultadosQuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resultados_quiz)
 
-        preguntas = cargarPreguntasDesdeAssets()
+        preguntas = cargarPreguntasDesdeFile()
+
 
         val layoutResultados = findViewById<LinearLayout>(R.id.layoutResultados)
         val textViewCantidadCorrectas = findViewById<TextView>(R.id.textViewCantidadCorrectas)
@@ -75,4 +77,14 @@ class ResultadosQuizActivity : AppCompatActivity() {
         val tipoLista = object : TypeToken<List<Pregunta>>() {}.type
         return gson.fromJson(jsonString, tipoLista)
     }
+
+    private fun cargarPreguntasDesdeFile(): List<Pregunta> {
+        val file = File(filesDir, "questions.json")
+        if (!file.exists()) return emptyList()
+
+        val json = file.readText()
+        val tipo = object : TypeToken<List<Pregunta>>() {}.type
+        return Gson().fromJson(json, tipo)
+    }
+
 }
