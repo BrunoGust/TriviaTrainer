@@ -38,7 +38,7 @@ Cada pregunta debe:
 - Tener una sola respuesta correcta
 - Tener 4 opciones (A–D)
 - Marcar cuál es la correcta
-
+- Incluir un enlace a la fuente confiable de donde fue obtenida la pregunta
 Usa este formato exacto para cada sección:
 
 [PREGUNTAS - FÁCIL]
@@ -48,7 +48,7 @@ B) ...
 C) ...
 D) ...
 Respuesta: <Letra>
-
+Fuente: <URL>
 ...
 
 [PREGUNTAS - MEDIO]
@@ -57,7 +57,7 @@ Respuesta: <Letra>
 [PREGUNTAS - DIFÍCIL]
 ...
 
-No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas con opciones y respuestas. Usa conocimiento verificado y sin ambigüedad.
+No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas con opciones y respuestas. No inventes enlaces. Usa conocimiento verificado y sin ambigüedad.
 """.trimIndent())
         )
     )
@@ -153,13 +153,14 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
 data class PreguntaParseada(
     val pregunta: String,
     val opciones: List<String>,
-    val respuestaCorrecta: Int
+    val respuestaCorrecta: Int,
+    val fuente: String
 )
 
 
 fun extraerTodasLasPreguntas(texto: String): List<PreguntaParseada> {
     val regex = Regex(
-        """\d+\.\s*(.*?)\s*A\)\s*(.*?)\s*B\)\s*(.*?)\s*C\)\s*(.*?)\s*D\)\s*(.*?)\s*Respuesta:\s*([A-D])""",
+        """\d+\.\s*(.*?)\s*A\)\s*(.*?)\s*B\)\s*(.*?)\s*C\)\s*(.*?)\s*D\)\s*(.*?)\s*Respuesta:\s*([A-D])\s*Fuente:\s*(https?://\S+)""",
         RegexOption.DOT_MATCHES_ALL
     )
 
@@ -167,7 +168,8 @@ fun extraerTodasLasPreguntas(texto: String): List<PreguntaParseada> {
         val enunciado = match.groupValues[1].trim()
         val opciones = (2..5).map { match.groupValues[it].trim() }
         val respuesta = match.groupValues[6].trim()[0] - 'A'
-        PreguntaParseada(enunciado, opciones, respuesta)
+        val fuente = match.groupValues[7].trim()
+        PreguntaParseada(enunciado, opciones, respuesta, fuente)
     }.toList()
 }
 
@@ -182,8 +184,9 @@ fun guardarPreguntasEnJSON(
     val file = File(context.filesDir, nombreArchivo)
 
     val nuevas = nuevasPreguntas.mapIndexed { index, p ->
-        Pregunta(index + 1, p.pregunta, p.opciones, p.respuestaCorrecta)
+        Pregunta(index + 1, p.pregunta, p.opciones, p.respuestaCorrecta, p.fuente)
     }
+
 
     file.writeText(gson.toJson(nuevas)) // Sobrescribe completamente
 }
