@@ -2,9 +2,11 @@ package com.example.triviatrainerapp
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
@@ -34,31 +36,39 @@ class ResultadosQuizActivity : AppCompatActivity() {
         layoutResultados.removeAllViews()
 
         for (respuesta in respuestasUsuario) {
-            // Buscamos la pregunta por id en vez de index directo
             val preguntaObj = preguntas.find { it.id == respuesta.idPregunta }
             val preguntaTexto = preguntaObj?.pregunta ?: "Pregunta desconocida"
             val opciones = preguntaObj?.opciones ?: emptyList()
             val indiceCorrecto = preguntaObj?.respuesta_correcta ?: -1
+            val fuente = preguntaObj?.fuente ?: "Fuente no disponible"
             val seleccionUsuario = respuesta.indiceSeleccionado
-
-            val textoResultado = StringBuilder()
-            textoResultado.append("P${respuesta.idPregunta}: $preguntaTexto\n")
-            textoResultado.append("Tu respuesta: ")
-
             val textoRespuestaUsuario = opciones.getOrNull(seleccionUsuario) ?: "Respuesta desconocida"
-            textoResultado.append(textoRespuestaUsuario)
 
             val esCorrecta = seleccionUsuario == indiceCorrecto
             if (esCorrecta) correctas++
+
+            // 📄 Construir contenido con formato HTML
+            val textoResultadoHtml = buildString {
+                append("<b>P${respuesta.idPregunta}:</b> $preguntaTexto<br>")
+                append("<b>Tu respuesta:</b> $textoRespuestaUsuario<br>")
+                if (!esCorrecta) {
+                    val textoCorrecto = opciones.getOrNull(indiceCorrecto) ?: "No disponible"
+                    append("<b><font color='#B00020'>Respuesta correcta:</font></b> $textoCorrecto<br>")
+                    append("<b><font color='#B00020'>Fuente:</font></b> <a href=\"$fuente\"><font color='#000000'>$fuente</font></a>")
+                }
+
+            }
+
 
             val textView = TextView(this).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply { bottomMargin = 16 }
+                ).apply { bottomMargin = 24 }
 
                 setPadding(12, 12, 12, 12)
-                text = textoResultado.toString()
+                text = HtmlCompat.fromHtml(textoResultadoHtml, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                movementMethod = LinkMovementMethod.getInstance() // Hace clicable el link si es URL
                 textSize = 18f
                 setTextColor(if (esCorrecta) Color.parseColor("#004D00") else Color.parseColor("#B00020"))
                 setBackgroundColor(if (esCorrecta) Color.parseColor("#C8E6C9") else Color.parseColor("#FFCDD2"))
@@ -66,6 +76,8 @@ class ResultadosQuizActivity : AppCompatActivity() {
 
             layoutResultados.addView(textView)
         }
+
+
 
         textViewCantidadCorrectas.text = "OBTUVISTE $correctas DE ${respuestasUsuario.size} CORRECTAS!"
         textViewCantidadCorrectas.setTextColor(if (correctas == respuestasUsuario.size) Color.parseColor("#90EE90") else Color.RED)
