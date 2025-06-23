@@ -3,6 +3,7 @@ package com.example.triviatrainerapp
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -21,6 +22,8 @@ class QuizActivity2 : AppCompatActivity() {
     private var opcionSeleccionada: Button? = null
     private lateinit var preguntas: List<Pregunta>
     private var indicePreguntaActual = 0
+    private var countDownTimer: CountDownTimer? = null // VARIABLE PARA ALMACENAR CONTADOR
+    private val tiempoLimite: Long = 45000  // 45 segundos en milisegundos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,35 +70,10 @@ class QuizActivity2 : AppCompatActivity() {
 
         btnSiguiente.setOnClickListener {
             if (opcionSeleccionada != null) {
-                val botones = listOf(
-                    findViewById<Button>(R.id.buttonRespuesta1),
-                    findViewById<Button>(R.id.buttonRespuesta2),
-                    findViewById<Button>(R.id.buttonRespuesta3),
-                    findViewById<Button>(R.id.buttonRespuesta4)
-                )
-                val indiceSeleccionado = botones.indexOf(opcionSeleccionada)
-                val preguntaActual = preguntas[indicePreguntaActual]
-
-                // Guardar respuesta
-                respuestasUsuario.add(
-                    RespuestaUsuario(
-                        idPregunta = preguntaActual.id,
-                        indiceSeleccionado = indiceSeleccionado,
-                        indiceCorrecto = preguntaActual.respuesta_correcta
-                    )
-                )
-
-                if (++indicePreguntaActual < preguntas.size) {
-                    mostrarPregunta(preguntas[indicePreguntaActual])
-                } else {
-                    val intent = Intent(this, ResultadosQuizActivity::class.java).apply {
-                        putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
-                        putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "CALCULANDO RESULTADOS...")
-                        putParcelableArrayListExtra("respuestas_usuario", ArrayList(respuestasUsuario))
-                    }
-                    startActivity(intent)
-                }
-            } else {
+                countDownTimer?.cancel()
+                avanzarASiguientePregunta()
+            }
+            else {
                 Toast.makeText(this, "Selecciona una respuesta", Toast.LENGTH_SHORT).show()
             }
         }
@@ -119,6 +97,7 @@ class QuizActivity2 : AppCompatActivity() {
             findViewById<Button>(R.id.buttonRespuesta3),
             findViewById<Button>(R.id.buttonRespuesta4)
         )
+        val textViewTiempo = findViewById<TextView>(R.id.textViewTiempoNumero)
 
         pregunta.text = "P${preguntaData.id}: ${preguntaData.pregunta}"
         botones.forEachIndexed { i, btn ->
@@ -127,7 +106,65 @@ class QuizActivity2 : AppCompatActivity() {
         }
 
         opcionSeleccionada = null
+
+        // Cancelar si hay temporizador activo
+        countDownTimer?.cancel()
+
+        // Iniciar temporizador
+        countDownTimer = object : CountDownTimer(tiempoLimite, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val segundosRestantes = millisUntilFinished / 1000
+                val minutos = segundosRestantes / 60
+                val segundos = segundosRestantes % 60
+                textViewTiempo.text = String.format("%02d:%02d", minutos, segundos)
+            }
+
+            override fun onFinish() {
+                textViewTiempo.text = "00:00"
+                // Si no se seleccionó respuesta, continuar
+                if (opcionSeleccionada == null) {
+                    avanzarASiguientePregunta()
+                }
+            }
+        }.start()
     }
+    private fun avanzarASiguientePregunta() {
+        val botones = listOf(
+            findViewById<Button>(R.id.buttonRespuesta1),
+            findViewById<Button>(R.id.buttonRespuesta2),
+            findViewById<Button>(R.id.buttonRespuesta3),
+            findViewById<Button>(R.id.buttonRespuesta4)
+        )
+
+        val preguntaActual = preguntas[indicePreguntaActual]
+
+        val indiceSeleccionado = if (opcionSeleccionada != null) {
+            botones.indexOf(opcionSeleccionada)
+        } else {
+            -1 // No respondió
+        }
+
+        respuestasUsuario.add(
+            RespuestaUsuario(
+                idPregunta = preguntaActual.id,
+                indiceSeleccionado = indiceSeleccionado,
+                indiceCorrecto = preguntaActual.respuesta_correcta
+            )
+        )
+
+        indicePreguntaActual++
+        if (indicePreguntaActual < preguntas.size) {
+            mostrarPregunta(preguntas[indicePreguntaActual])
+        } else {
+            val intent = Intent(this, ResultadosQuizActivity::class.java).apply {
+                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
+                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "CALCULANDO RESULTADOS...")
+                putParcelableArrayListExtra("respuestas_usuario", ArrayList(respuestasUsuario))
+            }
+            startActivity(intent)
+        }
+    }
+
 
     // carga de la carpeta assets
     private fun cargarPreguntasDesdeJSON(): List<Pregunta> {
