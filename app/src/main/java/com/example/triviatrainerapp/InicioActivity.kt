@@ -26,6 +26,7 @@ import com.google.ai.client.generativeai.type.SafetySetting
 import com.google.ai.client.generativeai.type.TextPart
 import com.google.ai.client.generativeai.type.generationConfig
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
 class InicioActivity : AppCompatActivity() {
@@ -36,6 +37,7 @@ class InicioActivity : AppCompatActivity() {
     private lateinit var welcomeTextView: TextView
     private lateinit var speechRecognizerLauncher: ActivityResultLauncher<Intent>
     private lateinit var salirBtn: Button
+    private lateinit var btnAssistant: ImageButton
 
 
     val config = generationConfig {
@@ -101,6 +103,7 @@ class InicioActivity : AppCompatActivity() {
         generateQuizButton = findViewById(R.id.generar_quiz_btn)
         welcomeTextView = findViewById(R.id.textView4)
         salirBtn = findViewById(R.id.salir_btn)
+        btnAssistant = findViewById(R.id.buttonHelpInicio)
 
         val username = intent.getStringExtra(MainActivity.EXTRA_USERNAME)
         if (username != null && username.isNotEmpty()) {
@@ -194,6 +197,12 @@ class InicioActivity : AppCompatActivity() {
             startActivity(exitIntent)
             finish()
 
+        }
+
+
+        btnAssistant.setOnClickListener {
+            val dialog = AssistantDialogFragment()
+            dialog.show(supportFragmentManager, "AssistantDialog")
         }
 
 

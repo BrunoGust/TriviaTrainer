@@ -16,6 +16,7 @@ import com.google.gson.Gson
 import java.io.File
 import android.content.Context
 import android.util.Log
+import android.widget.ImageButton
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.reflect.TypeToken
 import com.google.ai.client.generativeai.GenerativeModel
@@ -26,6 +27,8 @@ import kotlinx.coroutines.launch
 class RepasoActivity : AppCompatActivity() {
 
     private lateinit var welcomeTextView: TextView
+
+    private lateinit var btnAssistant: ImageButton
 
     val systemInstructionPreguntas = Content(
         role = "system",
@@ -142,6 +145,13 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
                     Toast.makeText(this@RepasoActivity, "Error generando preguntas", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        btnAssistant = findViewById(R.id.buttonHelpRepaso)
+
+        btnAssistant.setOnClickListener {
+            val dialog = AssistantDialogFragment()
+            dialog.show(supportFragmentManager, "AssistantDialog")
         }
 
 
