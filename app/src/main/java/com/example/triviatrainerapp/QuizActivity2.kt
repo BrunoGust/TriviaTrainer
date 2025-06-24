@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.speech.tts.TextToSpeech
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -16,6 +17,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import java.io.File
+import android.view.accessibility.AccessibilityManager
+
 
 class QuizActivity2 : AppCompatActivity() {
     private val respuestasUsuario = mutableListOf<RespuestaUsuario>()
@@ -25,7 +28,8 @@ class QuizActivity2 : AppCompatActivity() {
     private var countDownTimer: CountDownTimer? = null // VARIABLE PARA ALMACENAR CONTADOR
     private val tiempoLimite: Long = 45000  // 45 segundos en milisegundos
     private var mensajeInicial: Boolean = true
-
+    private lateinit var tts: TextToSpeech // variable para el manejo del voz a texto
+    private var talkBackActivo: Boolean = false // inicialmente considera que el talkback esta desactivado
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,7 +37,18 @@ class QuizActivity2 : AppCompatActivity() {
         //Cargar Preguntas de archivo json
         preguntas = cargarPreguntasDesdeJSON()
         mostrarPregunta(preguntas[indicePreguntaActual])
-
+        // 1ro verificamos que el talkback esta activo
+        val am = getSystemService(ACCESSIBILITY_SERVICE) as AccessibilityManager
+        talkBackActivo = am.isTouchExplorationEnabled
+        // si esta activo inicializamos el servicio de texto a voz
+        if (talkBackActivo) {
+            tts = TextToSpeech(this) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    tts.language = java.util.Locale.getDefault()
+                    leerPreguntaYOpciones()
+                }
+            }
+        }
         // Configurar UI
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -185,6 +200,27 @@ class QuizActivity2 : AppCompatActivity() {
         val tipo = object : TypeToken<List<Pregunta>>() {}.type
         return Gson().fromJson(json, tipo)
     }
-
-
+    // funcion para leer la pregunta y sus opciones
+    private fun leerPreguntaYOpciones() {
+        val preguntaActual = preguntas[indicePreguntaActual]
+        val enunciado = StringBuilder()
+        enunciado.append("Pregunta ${preguntaActual.id}: ${preguntaActual.pregunta}. ")
+        preguntaActual.opciones.forEachIndexed { i, opcion ->
+            enunciado.append("Opción ${'A' + i}: $opcion. ")
+        }
+        hablar(enunciado.toString())
+    }
+    private fun hablar(texto: String) {
+        if (::tts.isInitialized) {
+            tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+    }
+    // Liberamos el texto a voz una vez que concluyo la actividad
+    override fun onDestroy() {
+        if (::tts.isInitialized) {
+            tts.stop()
+            tts.shutdown()
+        }
+        super.onDestroy()
+    }
 }
