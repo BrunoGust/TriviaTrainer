@@ -57,7 +57,12 @@ class QuizActivity2 : AppCompatActivity() {
         }
 
         btnHelp.setOnClickListener {
-            mostrarDialogoAyuda()
+            //mostrarDialogoAyuda()
+            val dialog = AssistantDialogFragment()
+            dialog.arguments = Bundle().apply {
+                putString("pantalla", "quiz")
+            }
+            dialog.show(supportFragmentManager, "AssistantDialog")
         }
 
         btnsOpciones.forEach { btn ->

@@ -202,8 +202,12 @@ class InicioActivity : AppCompatActivity() {
 
         btnAssistant.setOnClickListener {
             val dialog = AssistantDialogFragment()
+            dialog.arguments = Bundle().apply {
+                putString("pantalla", "inicio")
+            }
             dialog.show(supportFragmentManager, "AssistantDialog")
         }
+
 
 
     }
