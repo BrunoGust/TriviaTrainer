@@ -151,8 +151,12 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
 
         btnAssistant.setOnClickListener {
             val dialog = AssistantDialogFragment()
+            dialog.arguments = Bundle().apply {
+                putString("pantalla", "repaso")
+            }
             dialog.show(supportFragmentManager, "AssistantDialog")
         }
+
 
 
 

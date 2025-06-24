@@ -3,6 +3,7 @@ package com.example.triviatrainerapp
 import android.graphics.Color
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,11 +16,14 @@ class ResultadosQuizActivity : AppCompatActivity() {
 
     private lateinit var preguntas: List<Pregunta>
 
+    private lateinit var btnAssistant: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resultados_quiz)
 
         preguntas = cargarPreguntasDesdeFile()
+        btnAssistant = findViewById(R.id.buttonHelpResultados)
 
 
         val layoutResultados = findViewById<LinearLayout>(R.id.layoutResultados)
@@ -81,6 +85,14 @@ class ResultadosQuizActivity : AppCompatActivity() {
 
         textViewCantidadCorrectas.text = "OBTUVISTE $correctas DE ${respuestasUsuario.size} CORRECTAS!"
         textViewCantidadCorrectas.setTextColor(if (correctas == respuestasUsuario.size) Color.parseColor("#90EE90") else Color.RED)
+
+        btnAssistant.setOnClickListener {
+            val dialog = AssistantDialogFragment()
+            dialog.arguments = Bundle().apply {
+                putString("pantalla", "resultados")
+            }
+            dialog.show(supportFragmentManager, "AssistantDialog")
+        }
     }
 
     private fun cargarPreguntasDesdeAssets(): List<Pregunta> {

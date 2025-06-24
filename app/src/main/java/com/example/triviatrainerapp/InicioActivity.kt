@@ -38,6 +38,7 @@ class InicioActivity : AppCompatActivity() {
     private lateinit var speechRecognizerLauncher: ActivityResultLauncher<Intent>
     private lateinit var salirBtn: Button
     private lateinit var btnAssistant: ImageButton
+    private var mensajeInicial: Boolean = true
 
 
     val config = generationConfig {
@@ -202,8 +203,21 @@ class InicioActivity : AppCompatActivity() {
 
         btnAssistant.setOnClickListener {
             val dialog = AssistantDialogFragment()
+            dialog.arguments = Bundle().apply {
+                putString("pantalla", "inicio")
+                putBoolean("autoBienvenida", true)
+            }
             dialog.show(supportFragmentManager, "AssistantDialog")
         }
+
+        // Abrir automáticamente el asistente con un mensaje de bienvenida
+        val dialog = AssistantDialogFragment().apply {
+            arguments = Bundle().apply {
+                putString("pantalla", "inicio")
+                putBoolean("autoBienvenida", true)
+            }
+        }
+        dialog.show(supportFragmentManager, "AssistantDialog")
 
 
     }

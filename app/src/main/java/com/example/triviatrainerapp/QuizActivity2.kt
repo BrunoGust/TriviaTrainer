@@ -24,6 +24,7 @@ class QuizActivity2 : AppCompatActivity() {
     private var indicePreguntaActual = 0
     private var countDownTimer: CountDownTimer? = null // VARIABLE PARA ALMACENAR CONTADOR
     private val tiempoLimite: Long = 45000  // 45 segundos en milisegundos
+    private var mensajeInicial: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +58,14 @@ class QuizActivity2 : AppCompatActivity() {
         }
 
         btnHelp.setOnClickListener {
-            mostrarDialogoAyuda()
+            //mostrarDialogoAyuda()
+            val dialog = AssistantDialogFragment()
+            dialog.arguments = Bundle().apply {
+                putString("pantalla", "quiz")
+                putBoolean("mensajeInicial", mensajeInicial)
+            }
+            dialog.show(supportFragmentManager, "AssistantDialog")
+            mensajeInicial=false
         }
 
         btnsOpciones.forEach { btn ->
