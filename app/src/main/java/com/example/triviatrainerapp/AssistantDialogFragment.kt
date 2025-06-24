@@ -109,7 +109,14 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
 
         recyclerView.scrollToPosition(chatViewModel.messages.size - 1)
 
-        //mostrarMensajeInicial()
+        mostrarMensajeInicial()
+        val mostrarBienvenida = arguments?.getBoolean("autoBienvenida", false) == true
+        if (mostrarBienvenida && chatViewModel.messages.isEmpty()) {
+            val mensaje = "Hola, soy tu asistente virtual. Estoy aquí para ayudarte a usar la aplicación. ¿En qué puedo ayudarte?"
+            addMessage(mensaje, isUser = false)
+        }
+
+
 
         return view
     }
@@ -137,7 +144,14 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
 
     private fun mostrarMensajeInicial() {
         val pantalla = arguments?.getString("pantalla") ?: "general"
-        addMessage("Estás en la pantalla: "+pantalla, isUser = false)
+        val mensajeInicial = arguments?.getBoolean("mensajeInicial", false) == true
+        if(mensajeInicial){
+            if (pantalla=="quiz") {
+                val mensaje = "Selecciona una respuesta y presiona 'Siguiente Pregunta'. Puedes salir en cualquier momento."
+                addMessage(mensaje, isUser = false)
+            }
+        }
+
     }
 
     private fun responderConContexto(userInput: String) {

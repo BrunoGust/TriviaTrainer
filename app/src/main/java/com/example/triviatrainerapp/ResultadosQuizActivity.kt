@@ -23,6 +23,7 @@ class ResultadosQuizActivity : AppCompatActivity() {
         setContentView(R.layout.activity_resultados_quiz)
 
         preguntas = cargarPreguntasDesdeFile()
+        btnAssistant = findViewById(R.id.buttonHelpResultados)
 
 
         val layoutResultados = findViewById<LinearLayout>(R.id.layoutResultados)
