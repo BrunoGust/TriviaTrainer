@@ -1,3 +1,5 @@
-package com.example.triviatrainerapp
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-data class ChatMessage(val message: String, val isUser: Boolean)
+@Parcelize
+data class ChatMessage(val message: String, val isUser: Boolean) : Parcelable

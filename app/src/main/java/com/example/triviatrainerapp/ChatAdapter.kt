@@ -1,5 +1,6 @@
 package com.example.triviatrainerapp
 
+import ChatMessage
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

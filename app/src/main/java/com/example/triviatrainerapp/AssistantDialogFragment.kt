@@ -1,44 +1,48 @@
 package com.example.triviatrainerapp
 
-import android.content.Context
+import ChatMessage
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 class AssistantDialogFragment : DialogFragment() {
 
-    private val messages = mutableListOf<ChatMessage>()
+    private lateinit var chatViewModel: ChatViewModel
     private lateinit var adapter: ChatAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_assistant_dialog, container, false)
+
+        //  Obtener el ViewModel compartido entre actividades
+        val app = requireActivity().application as MyApplication
+
+        chatViewModel = ViewModelProvider(
+            app, // ViewModelStoreOwner global
+            ViewModelProvider.AndroidViewModelFactory.getInstance(app)
+        ).get(ChatViewModel::class.java)
+
+
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.chatRecyclerView)
         val input = view.findViewById<EditText>(R.id.userInput)
         val sendButton = view.findViewById<ImageButton>(R.id.sendButton)
         val closeButton = view.findViewById<ImageButton>(R.id.btnCloseAssistant)
 
-        adapter = ChatAdapter(messages)
+        //  Enlazar adaptador con la lista del ViewModel
+        adapter = ChatAdapter(chatViewModel.messages)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        messages.clear()
-        //messages.addAll(loadMessages())
-        adapter.notifyDataSetChanged()
-
 
         sendButton.setOnClickListener {
             val userMessage = input.text.toString().trim()
@@ -53,35 +57,20 @@ class AssistantDialogFragment : DialogFragment() {
             dismiss()
         }
 
-
+        recyclerView.scrollToPosition(chatViewModel.messages.size - 1)
 
 
         return view
     }
 
     private fun addMessage(message: String, isUser: Boolean) {
-        messages.add(ChatMessage(message, isUser))
-        adapter.notifyItemInserted(messages.size - 1)
-        //saveMessages()
+        val chatMessage = ChatMessage(message, isUser)
+        chatViewModel.addMessage(chatMessage)
+        adapter.notifyItemInserted(chatViewModel.messages.size - 1)
 
+        // Desplazar al último mensaje
+        view?.findViewById<RecyclerView>(R.id.chatRecyclerView)?.scrollToPosition(chatViewModel.messages.size - 1)
     }
-
-    private val PREFS_NAME = "assistant_prefs"
-    private val KEY_MESSAGES = "chat_messages"
-
-    private fun saveMessages() {
-        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val json = Gson().toJson(messages)
-        prefs.edit().putString(KEY_MESSAGES, json).apply()
-    }
-
-    private fun loadMessages(): MutableList<ChatMessage> {
-        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val json = prefs.getString(KEY_MESSAGES, null) ?: return mutableListOf()
-        val type = object : TypeToken<MutableList<ChatMessage>>() {}.type
-        return Gson().fromJson(json, type)
-    }
-
 
     private fun simulateAssistantResponse(userInput: String) {
         val response = when {
@@ -95,14 +84,6 @@ class AssistantDialogFragment : DialogFragment() {
         }, 800)
     }
 
-    private fun borrarMensajesGuardados() {
-        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefs.edit().clear().apply()  // Elimina todos los datos guardados en este SharedPreferences
-        messages.clear()              // Limpia también la lista en memoria
-        adapter.notifyDataSetChanged()
-    }
-
-
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(
@@ -112,4 +93,3 @@ class AssistantDialogFragment : DialogFragment() {
         dialog?.window?.setGravity(Gravity.BOTTOM)
     }
 }
-
