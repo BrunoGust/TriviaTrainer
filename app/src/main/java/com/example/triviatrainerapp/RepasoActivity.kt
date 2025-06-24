@@ -15,6 +15,7 @@ import org.json.JSONObject
 import com.google.gson.Gson
 import java.io.File
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.widget.ImageButton
 import androidx.lifecycle.lifecycleScope
@@ -107,7 +108,7 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
 
         val editText = findViewById<EditText>(R.id.editTextText)
         editText.setText(resumen)
-
+        editText.setTextColor(Color.WHITE) // la fuente del resumen sera blanco para consistencia y buen contraste
 
         val button: Button = findViewById(R.id.btnEmpezarQuiz)
         welcomeTextView = findViewById(R.id.textView4)
