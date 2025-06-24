@@ -36,10 +36,10 @@ class QuizActivity2 : AppCompatActivity() {
         setContentView(R.layout.activity_quiz2)
         //Cargar Preguntas de archivo json
         preguntas = cargarPreguntasDesdeJSON()
-        mostrarPregunta(preguntas[indicePreguntaActual])
+
         // 1ro verificamos que el talkback esta activo
         val am = getSystemService(ACCESSIBILITY_SERVICE) as AccessibilityManager
-        talkBackActivo = am.isTouchExplorationEnabled
+        talkBackActivo = am.isEnabled && am.isTouchExplorationEnabled
         // si esta activo inicializamos el servicio de texto a voz
         if (talkBackActivo) {
             tts = TextToSpeech(this) { status ->
@@ -49,6 +49,7 @@ class QuizActivity2 : AppCompatActivity() {
                 }
             }
         }
+        mostrarPregunta(preguntas[indicePreguntaActual])
         // Configurar UI
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -150,6 +151,10 @@ class QuizActivity2 : AppCompatActivity() {
                 }
             }
         }.start()
+        // Leeremos la pregunta y respuestas una vez que cambie a la siguiente pregunta
+        if(talkBackActivo){
+            leerPreguntaYOpciones()
+        }
     }
     private fun avanzarASiguientePregunta() {
         val botones = listOf(
