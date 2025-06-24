@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id ("kotlin-parcelize")
-
+    alias(libs.plugins.googleService)
 
 }
 
@@ -52,6 +52,7 @@ android {
     }
     buildFeatures{
         buildConfig = true
+        viewBinding = true
     }
 }
 
@@ -63,6 +64,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.firebaseDatabase)
     implementation("com.google.code.gson:gson:2.10.1")
     // SDK de Gemini
     implementation(libs.google.generativeai)
