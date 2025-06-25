@@ -3,8 +3,11 @@ package com.example.triviatrainerapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +27,10 @@ class MainActivity : AppCompatActivity() {
     private var databaseReference: DatabaseReference =
         firebaseDatabase.getReference().child("Usuarios")
 
+    // Referencias a los componentes del overlay de carga
+    private lateinit var loadingOverlay: FrameLayout
+    private lateinit var loadingMessageTextView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,6 +45,9 @@ class MainActivity : AppCompatActivity() {
         val claveInput: EditText = findViewById(R.id.clave_input)
         val registrar_btn: Button = findViewById(R.id.registrar_btn)
 
+        loadingOverlay = findViewById(R.id.loading_overlay)
+        loadingMessageTextView = findViewById(R.id.loading_message)
+
         ingresar_btn.setOnClickListener {
             val inputIdentifier =
                 usuarioInput.text.toString().trim() // Obtener el texto del EditText del usuario
@@ -49,11 +59,15 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener // Salir de la función si el campo está vacío
             }
 
+            showLoadingOverlay("INICIANDO SESIÓN...")
+
             // Realizar la búsqueda en Firebase
             // Intentaremos buscar por email primero
             databaseReference.orderByChild("email").equalTo(inputIdentifier)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
+                        // Ocultar la pantalla de carga una vez que se reciben los datos (éxito o fallo)
+                        //hideLoadingOverlay()
                         Log.d("MainActivity", "Email search onDataChange: ${snapshot.value}")
                         var loginSuccessful = false // Bandera para saber si el login fue exitoso
 
@@ -67,11 +81,10 @@ class MainActivity : AppCompatActivity() {
                                         if (user.password == password) {
                                             // Contraseña correcta
                                             Toast.makeText(this@MainActivity, "Inicio de sesión exitoso.", Toast.LENGTH_SHORT).show()
-                                            val intent = Intent(this@MainActivity, LoadingScreenActivity::class.java).apply {
-                                                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
-                                                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "INICIANDO SESIÓN...")
+                                            val intent = Intent(this@MainActivity, InicioActivity::class.java).apply { // Directo a InicioActivity
                                                 putExtra(EXTRA_USERNAME, user.username)
                                             }
+                                            hideLoadingOverlay()
                                             startActivity(intent)
                                             finish()
                                             loginSuccessful = true // Marcar como exitoso
@@ -86,6 +99,7 @@ class MainActivity : AppCompatActivity() {
                             }
                             // Si el bucle termina y el login no fue exitoso, es porque la contraseña era incorrecta
                             if (!loginSuccessful) {
+                                hideLoadingOverlay()
                                 Toast.makeText(this@MainActivity, "Contraseña incorrecta.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
@@ -94,6 +108,8 @@ class MainActivity : AppCompatActivity() {
                             databaseReference.orderByChild("username").equalTo(inputIdentifier)
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(usernameSnapshot: DataSnapshot) {
+                                        // Ocultar la pantalla de carga una vez que se reciben los datos (éxito o fallo)
+                                        //hideLoadingOverlay()
                                         Log.d("MainActivity", "Username search onDataChange: ${usernameSnapshot.value}")
                                         var usernameLoginSuccessful = false // Bandera para la búsqueda por username
 
@@ -106,12 +122,12 @@ class MainActivity : AppCompatActivity() {
                                                         Log.d("MainActivity", "User found by username: ${user.username}, Email: ${user.email}, Pass: ${user.password}")
                                                         if (user.password == password) {
                                                             Toast.makeText(this@MainActivity, "Inicio de sesión exitoso.", Toast.LENGTH_SHORT).show()
-                                                            val intent = Intent(this@MainActivity, LoadingScreenActivity::class.java).apply {
-                                                                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
-                                                                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "INICIANDO SESIÓN...")
+                                                            val intent = Intent(this@MainActivity, InicioActivity::class.java).apply { // Directo a InicioActivity
                                                                 putExtra(EXTRA_USERNAME, user.username)
                                                             }
+                                                            //hideLoadingOverlay()
                                                             startActivity(intent)
+                                                            hideLoadingOverlay()
                                                             finish()
                                                             usernameLoginSuccessful = true // Marcar como exitoso
                                                             return // Salir del listener y el bucle
@@ -125,15 +141,18 @@ class MainActivity : AppCompatActivity() {
                                             }
                                             // Si el bucle termina y el login no fue exitoso, es porque la contraseña era incorrecta
                                             if (!usernameLoginSuccessful) {
+                                                hideLoadingOverlay()
                                                 Toast.makeText(this@MainActivity, "Contraseña incorrecta.", Toast.LENGTH_SHORT).show()
                                             }
                                         } else {
                                             // Usuario no encontrado ni por email ni por username
+                                            hideLoadingOverlay()
                                             Toast.makeText(this@MainActivity, "Usuario o email no registrado.", Toast.LENGTH_SHORT).show()
                                         }
                                     }
 
                                     override fun onCancelled(error: DatabaseError) {
+                                        hideLoadingOverlay()
                                         Toast.makeText(this@MainActivity, "Error en la búsqueda de usuario por username: ${error.message}", Toast.LENGTH_SHORT).show()
                                         Log.e("MainActivity", "Firebase query onCancelled (username): ${error.message}", error.toException())
                                     }
@@ -142,6 +161,8 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onCancelled(error: DatabaseError) {
+                        // Ocultar la pantalla de carga una vez que se reciben los datos (éxito o fallo)
+                        hideLoadingOverlay()
                         Toast.makeText(this@MainActivity, "Error en la búsqueda de usuario por email: ${error.message}", Toast.LENGTH_SHORT).show()
                         Log.e("MainActivity", "Firebase query onCancelled (email): ${error.message}", error.toException())
                     }
@@ -155,5 +176,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+    // Funciones para controlar la visibilidad del overlay de carga
+    private fun showLoadingOverlay(message: String) {
+        loadingMessageTextView.text = message
+        loadingOverlay.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingOverlay() {
+        loadingOverlay.visibility = View.GONE
     }
 }

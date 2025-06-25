@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -23,28 +25,29 @@ class RegistroActivity : AppCompatActivity() {
     //lateinit var binding: ActivityMainBinding
     private var firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     private var databaseReference: DatabaseReference = firebaseDatabase.getReference().child("Usuarios")
-    var keyTemporal: String = ""
+
+    // Referencias a los componentes del overlay de carga
+    private lateinit var loadingOverlay: FrameLayout
+    private lateinit var loadingMessageTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        //binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(R.layout.activity_registro)
-        //setContentView(binding.root)
-        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }*/
+
 
         val registrar_btn: Button = findViewById(R.id.regsitrar_btn)
         val usuarioInput: EditText = findViewById(R.id.usuario_input)
         val email_input: EditText = findViewById(R.id.email_input)
         val pass_input: EditText = findViewById(R.id.clave_input)
         val confir_pass_input: EditText = findViewById(R.id.confirmar_clave_input)
-
         val volver_btn: Button = findViewById(R.id.volver_btn)
+
+        // Enlazar los componentes del overlay de carga
+        loadingOverlay = findViewById(R.id.loading_overlay)
+        loadingMessageTextView = findViewById(R.id.loading_message)
 
         registrar_btn.setOnClickListener{
 
@@ -63,6 +66,9 @@ class RegistroActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Mostrar la pantalla de carga
+            showLoadingOverlay("REGISTRANDO USUARIO...")
+
             databaseReference.orderByChild("email").equalTo(email)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -75,6 +81,8 @@ class RegistroActivity : AppCompatActivity() {
                     }
 
                     override fun onCancelled(error: DatabaseError) {
+                        // Ocultar la pantalla de carga una vez que se recibe la respuesta de verificación
+                        hideLoadingOverlay()
                         Toast.makeText(this@RegistroActivity, "Error al verificar email: ${error.message}", Toast.LENGTH_SHORT).show()
                     }
                 })
@@ -97,26 +105,29 @@ class RegistroActivity : AppCompatActivity() {
             newRef.setValue(u)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Usuario registrado exitosamente.", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, LoadingScreenActivity::class.java).apply {
-                        putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
-                        putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "REGISTRANDO E INICIANDO SESIÓN...")
-                        putExtra(EXTRA_USERNAME, u.username) // Pasa el username real del objeto Usuario
+                    val intent = Intent(this, InicioActivity::class.java).apply { // Directo a InicioActivity
+                        putExtra(MainActivity.EXTRA_USERNAME, u.username)
                     }
                     startActivity(intent)
+                    hideLoadingOverlay()
                     finish()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "Error al registrar: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         } else {
+            hideLoadingOverlay()
             Toast.makeText(this, "Error al generar clave de usuario.", Toast.LENGTH_SHORT).show()
         }
     }
-    fun insertar(u: Usuario){
-        val key = databaseReference.push().key
-        if(key!=null){
-            u.clave = key
-            databaseReference.push().setValue(u)
-        }
+
+    // Funciones para controlar la visibilidad del overlay de carga
+    private fun showLoadingOverlay(message: String) {
+        loadingMessageTextView.text = message
+        loadingOverlay.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingOverlay() {
+        loadingOverlay.visibility = View.GONE
     }
 }
