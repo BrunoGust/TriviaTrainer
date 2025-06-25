@@ -144,9 +144,9 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
 
                     Toast.makeText(this@RepasoActivity, "Preguntas generadas y guardadas", Toast.LENGTH_SHORT).show()
 
-                    val intent = Intent(this@RepasoActivity, LoadingScreenActivity::class.java).apply {
-                        putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, QuizActivity2::class.java.name)
-                        putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO QUIZ...")
+                    val intent = Intent(this@RepasoActivity, QuizActivity2::class::class.java).apply {
+                        //putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, QuizActivity2::class.java.name)
+                        //putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO QUIZ...")
                         putExtra("TEMA",tema)
                     }
                     startActivity(intent)
