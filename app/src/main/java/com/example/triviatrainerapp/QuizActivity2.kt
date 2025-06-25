@@ -48,6 +48,8 @@ class QuizActivity2 : AppCompatActivity() {
         //Cargar Preguntas de archivo json
         preguntas = cargarPreguntasDesdeJSON()
 
+        val username = intent.getStringExtra(MainActivity.EXTRA_USERNAME)
+
         // 1ro verificamos que el talkback esta activo
         val am = getSystemService(ACCESSIBILITY_SERVICE) as AccessibilityManager
         talkBackActivo = am.isEnabled && am.isTouchExplorationEnabled
@@ -77,15 +79,23 @@ class QuizActivity2 : AppCompatActivity() {
         val btnSalir = findViewById<Button>(R.id.buttonSalirQuiz)
         // hacer clic en salir nos lleva a elegir tema del quiz
         btnSalir.setOnClickListener {
-            countDownTimer?.cancel() // Detenemos el contador antes de terminar el activity
-            val exitIntent = Intent(this, LoadingScreenActivity::class.java).apply {
-                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
-                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo a elegir tema para quiz")
-
-            }
-            startActivity(exitIntent)
-            finish()
-
+            AlertDialog.Builder(this)
+                .setTitle("Volver") // Título del diálogo
+                .setMessage("¿Estás seguro de que deseas regresar al inicio, $username?") // Mensaje
+                .setPositiveButton("Volver") { dialog, which ->
+                countDownTimer?.cancel() // Detenemos el contador antes de terminar el activity
+                val exitIntent = Intent(this, InicioActivity::class.java).apply {
+                    putExtra(MainActivity.EXTRA_USERNAME,username)
+                }
+                startActivity(exitIntent)
+                finish()
+                }
+                .setNegativeButton("Cancelar") { dialog, which -> // Botón "Negativo" (cancelar)
+                    dialog.dismiss()
+                    //Toast.makeText(this, "Cierre de sesión cancelado. Gracias por quedarte!", Toast.LENGTH_SHORT).show()
+                }
+                .setIcon(android.R.drawable.ic_dialog_alert) // Opcional: añade un icono de advertencia
+                .show()
         }
         val btnSiguiente = findViewById<Button>(R.id.buttonSiguientePregunta)
 
@@ -111,9 +121,9 @@ class QuizActivity2 : AppCompatActivity() {
                 it.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
         }
 
-        btnSalir.setOnClickListener {
+        /*btnSalir.setOnClickListener {
             finishAffinity() // Cierra completamente la app
-        }
+        }*/
 
         btnHelp.setOnClickListener {
             //mostrarDialogoAyuda()

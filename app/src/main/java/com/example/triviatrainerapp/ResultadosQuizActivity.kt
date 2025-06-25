@@ -3,11 +3,15 @@ package com.example.triviatrainerapp
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.method.LinkMovementMethod
 import android.util.Log
+import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -25,6 +29,9 @@ class ResultadosQuizActivity : AppCompatActivity() {
     private lateinit var btnAssistant: ImageButton
     val fuentes: MutableSet<String> = mutableSetOf()
 
+    private lateinit var loadingOverlay: FrameLayout
+    private lateinit var loadingMessageTextView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resultados_quiz)
@@ -32,6 +39,10 @@ class ResultadosQuizActivity : AppCompatActivity() {
         preguntas = cargarPreguntasDesdeFile()
         btnAssistant = findViewById(R.id.buttonHelpResultados)
         val tema  =intent.getStringExtra("TEMA")
+        val username = intent.getStringExtra(MainActivity.EXTRA_USERNAME)
+
+        loadingOverlay = findViewById(R.id.loading_overlay)
+        loadingMessageTextView = findViewById(R.id.loading_message)
 
         val layoutResultados = findViewById<LinearLayout>(R.id.layoutResultados)
         val textViewCantidadCorrectas = findViewById<TextView>(R.id.textViewCantidadCorrectas)
@@ -125,21 +136,27 @@ class ResultadosQuizActivity : AppCompatActivity() {
         // Nuevo Quiz y Salir nos llevan al mismo lugar?
         val botonSalirQuizResultados = findViewById<Button>(R.id.buttonSalirQuizResultados)
         botonSalirQuizResultados.setOnClickListener{
-            val intent = Intent(this, LoadingScreenActivity::class.java).apply {
-                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
-                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo al inicio para elegir tema")
+
+            showLoadingOverlay("REDIRIGIENDO AL INICIO")
+            val intent = Intent(this, InicioActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_USERNAME,username)
             }
             startActivity(intent)
             finish()
+            Handler(Looper.getMainLooper()).postDelayed({
+                            hideLoadingOverlay()
+                        }, 1000L)
         }
         val botonNuevoQuiz = findViewById<Button>(R.id.buttonEmpezarNuevoQuiz)
         botonNuevoQuiz.setOnClickListener{
-            val intent = Intent(this, LoadingScreenActivity::class.java).apply {
-                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
-                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo al inicio para elegir tema")
+            val intent = Intent(this, InicioActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_USERNAME,username)
             }
             startActivity(intent)
             finish()
+            Handler(Looper.getMainLooper()).postDelayed({
+                            hideLoadingOverlay()
+                        }, 1000L)
         }
 
     }
@@ -201,6 +218,14 @@ class ResultadosQuizActivity : AppCompatActivity() {
         }
     }
 
+    private fun showLoadingOverlay(message: String) {
+        loadingMessageTextView.text = message
+        loadingOverlay.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingOverlay() {
+        loadingOverlay.visibility = View.GONE
+    }
 
 
 }

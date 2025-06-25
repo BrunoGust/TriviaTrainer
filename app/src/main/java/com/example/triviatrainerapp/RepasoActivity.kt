@@ -1,5 +1,6 @@
 package com.example.triviatrainerapp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -147,7 +148,9 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
                     val intent = Intent(this@RepasoActivity, QuizActivity2::class.java).apply {
                         //putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, QuizActivity2::class.java.name)
                         //putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO QUIZ...")
+                        putExtra(MainActivity.EXTRA_USERNAME,username)
                         putExtra("TEMA",tema)
+
                     }
                     startActivity(intent)
                     finish()
@@ -175,9 +178,20 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
 
 
         btnVolver.setOnClickListener {
-            val intent = Intent(this@RepasoActivity, InicioActivity::class.java)
-            startActivity(intent)
-            finish()
+            AlertDialog.Builder(this)
+                .setTitle("Volver") // Título del diálogo
+                .setMessage("¿Estás seguro de que deseas regresar al inicio, $username?") // Mensaje
+                .setPositiveButton("Volver") { dialog, which ->
+                    val intent = Intent(this@RepasoActivity, InicioActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .setNegativeButton("Cancelar") { dialog, which -> // Botón "Negativo" (cancelar)
+                    dialog.dismiss()
+                    //Toast.makeText(this, "Cierre de sesión cancelado. Gracias por quedarte!", Toast.LENGTH_SHORT).show()
+                }
+                .setIcon(android.R.drawable.ic_dialog_alert) // Opcional: añade un icono de advertencia
+                .show()
         }
 
 

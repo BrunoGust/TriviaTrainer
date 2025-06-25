@@ -42,14 +42,14 @@
                 android:id="@+id/salir_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="25dp"
                 android:layout_weight="1"
                 android:background="@drawable/generic_button_selector"
                 android:fontFamily="@font/vt323"
                 android:foreground="@drawable/button_border_green"
                 android:text="> Cerrar Sesión"
                 android:textColor="@color/text_color"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 

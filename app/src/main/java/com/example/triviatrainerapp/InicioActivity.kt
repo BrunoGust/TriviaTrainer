@@ -241,7 +241,7 @@ class InicioActivity : AppCompatActivity() {
                 }
                 .setNegativeButton("Cancelar") { dialog, which -> // Botón "Negativo" (cancelar)
                     dialog.dismiss()
-                    Toast.makeText(this, "Cierre de sesión cancelado. Gracias por quedarte!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Gracias por quedarte!", Toast.LENGTH_SHORT).show()
                 }
                 .setIcon(android.R.drawable.ic_dialog_alert) // Opcional: añade un icono de advertencia
                 .show()
