@@ -124,7 +124,7 @@
                 android:contentDescription="Grabar voz"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/icon_microphono_white" />
+                android:src="@drawable/icon_microphono_black" />
 
         </LinearLayout>
         <LinearLayout

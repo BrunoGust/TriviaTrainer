@@ -30,14 +30,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textViewsaludoQuiz"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vt323"
-                android:text="BUENA SUERTE!"
-                android:textColor="@color/text_color"
-                android:textSize="20dp" />
+            <ImageButton
+                android:id="@+id/voz_btn_quiz2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="10sp"
+                android:background="@drawable/microphone_button_selector"
+                android:contentDescription="Toca dos veces para responder la pregunta por voz. Espera que termine la narración de la pregunta."
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_microphono_black" />
 
             <Button
                 android:id="@+id/buttonSalirQuiz"
@@ -56,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="16dp"
             android:gravity="center_vertical">
 
             <TextView
@@ -94,7 +96,7 @@
             android:id="@+id/textViewTituloQuiz"
             android:layout_width="match_parent"
             android:layout_height="87dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="0dp"
             android:fontFamily="@font/vt323"
             android:gravity="center|center_horizontal"
             android:shadowColor="@color/text_color"
@@ -110,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/vt323"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:background="@color/background_color"
             android:foreground="@drawable/button_border_green"
             android:orientation="vertical"
@@ -121,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vt323"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="P1: ¿Cuál es la capital de Perú?"
                 android:textColor="@color/text_color"
