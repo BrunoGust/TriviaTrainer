@@ -18,6 +18,12 @@ import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflec
 import com.google.gson.Gson
 import java.io.File
 import android.view.accessibility.AccessibilityManager
+import android.content.ActivityNotFoundException
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.util.Log
+import android.view.View
+import java.util.Locale
 
 
 class QuizActivity2 : AppCompatActivity() {
@@ -30,6 +36,8 @@ class QuizActivity2 : AppCompatActivity() {
     private var mensajeInicial: Boolean = true
     private lateinit var tts: TextToSpeech // variable para el manejo del voz a texto
     private var talkBackActivo: Boolean = false // inicialmente considera que el talkback esta desactivado
+    private val VOZ_REQUEST_CODE = 100// CONSTANTE RECONOCIMIENTO DE VOZ
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -58,8 +66,13 @@ class QuizActivity2 : AppCompatActivity() {
         }
 
         // Configurar botones
+        val botonVoz = findViewById<ImageButton>(R.id.voz_btn_quiz2)
+        botonVoz.setOnClickListener {
+            iniciarReconocimientoDeVoz()
+        }
         val btnSalir = findViewById<Button>(R.id.buttonSalirQuiz)
         val btnSiguiente = findViewById<Button>(R.id.buttonSiguientePregunta)
+
         val btnHelp = findViewById<ImageButton>(R.id.buttonHelp)
 
         val btnsOpciones = listOf(
@@ -68,6 +81,19 @@ class QuizActivity2 : AppCompatActivity() {
             findViewById<Button>(R.id.buttonRespuesta3),
             findViewById<Button>(R.id.buttonRespuesta4)
         )
+        // Desactivamos los botones para que no cometa errores de clic si el talkback esta activado
+        if (talkBackActivo) {
+            // Desactivar botón de siguiente pregunta
+            btnSiguiente.isEnabled = false
+            btnSiguiente.alpha = 0.5f // opcional: para que se vea desactivado
+            btnSiguiente.isFocusable = false
+            btnSiguiente.isFocusableInTouchMode = false
+            btnSiguiente.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            // Desactivar botones de opciones
+            btnsOpciones.forEach { it.isEnabled = false; it.alpha = 0.5f;it.isFocusable = false;
+                it.isFocusableInTouchMode = false;
+                it.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
+        }
 
         btnSalir.setOnClickListener {
             finishAffinity() // Cierra completamente la app
@@ -104,6 +130,8 @@ class QuizActivity2 : AppCompatActivity() {
 
 
     }
+
+
 
     private fun mostrarDialogoAyuda() {
         AlertDialog.Builder(this)
@@ -154,6 +182,9 @@ class QuizActivity2 : AppCompatActivity() {
         // Leeremos la pregunta y respuestas una vez que cambie a la siguiente pregunta
         if(talkBackActivo){
             leerPreguntaYOpciones()
+            // Enfocar el botón de voz al cambiar de pregunta para que no lea el nombre de la app
+            val botonVoz = findViewById<ImageButton>(R.id.voz_btn_quiz2)
+            botonVoz.sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent.TYPE_VIEW_FOCUSED)
         }
     }
     private fun avanzarASiguientePregunta() {
@@ -190,6 +221,7 @@ class QuizActivity2 : AppCompatActivity() {
                 putParcelableArrayListExtra("respuestas_usuario", ArrayList(respuestasUsuario))
             }
             startActivity(intent)
+            finish()// Terminamos el activity
         }
     }
 
@@ -220,6 +252,117 @@ class QuizActivity2 : AppCompatActivity() {
             tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, null)
         }
     }
+
+    // enviaremos el intent para pedirle al usuario que envie el comando de voz
+    private fun iniciarReconocimientoDeVoz() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-ES")
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Di el número de la opción que deseas responder o siguiente para pasar a la siguiente pregunta")
+
+        try {
+            startActivityForResult(intent, VOZ_REQUEST_CODE)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, "Reconocimiento de voz no soportado", Toast.LENGTH_SHORT).show()
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == VOZ_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            val resultados = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val textoReconocido = resultados?.get(0)?.lowercase() ?: return
+
+            procesarComandoDeVoz(textoReconocido)
+        }
+    }
+    private val opcionAExpresiones = listOf(
+        "opcion a", "opción a", "primera opción", "opción 1", "opcion 1",
+        "primera respuesta", "respuesta 1", "respuesta número 1","respuesta numero 1"
+    )
+    private val opcionBExpresiones = listOf(
+        "opcion b", "opción b", "segunda opción", "opción 2","opcion 2",
+        "segunda respuesta", "respuesta 2", "respuesta número 2","respuesta numero 2","opcion be"
+    )
+    private val opcionCExpresiones = listOf(
+        "opcion c", "opción c", "tercera opción", "opción 3", "opcion 3",
+        "tercera respuesta", "respuesta 3", "respuesta número 3","respuesta numero 3", "opcion ce"
+    )
+    private val opcionDExpresiones = listOf(
+        "opcion d", "opción d", "cuarta opción", "opción 4", "opcion 4",
+        "cuarta respuesta", "respuesta 4", "respuesta número 4","respuesta numero 4","opcion de"
+    )
+
+    private val continuarExpresiones = listOf(
+        "siguiente", "continuar", "avanzar", "próxima", "siguiente pregunta"
+    )
+    private fun normalizarTexto(texto: String): String {
+        return texto.lowercase()
+    }
+
+    // Verificamos que los comandos se encuentren en la lista de opciones
+    private fun procesarComandoDeVoz(texto: String) {
+        Toast.makeText(this, "Reconocido: $texto", Toast.LENGTH_LONG).show()
+
+        val textoNormalizado = normalizarTexto(texto)
+        Log.d("VOZ_DEBUG", "Texto crudo: '$texto'")
+        Log.d("VOZ_DEBUG", "Texto normalizado: '${normalizarTexto(texto)}'")
+        Log.d("VOZ_DEBUG", "Comparando con expresiones A: $opcionAExpresiones")
+
+        val botones = listOf(
+            findViewById<Button>(R.id.buttonRespuesta1),
+            findViewById<Button>(R.id.buttonRespuesta2),
+            findViewById<Button>(R.id.buttonRespuesta3),
+            findViewById<Button>(R.id.buttonRespuesta4)
+        )
+
+        when {
+            opcionAExpresiones.any { textoNormalizado.contains(it) } -> {
+                seleccionarOpcion(botones[0])
+                avanzarTrasSeleccion()
+            }
+            opcionBExpresiones.any { textoNormalizado.contains(it) } -> {
+                seleccionarOpcion(botones[1])
+                avanzarTrasSeleccion()
+            }
+            opcionCExpresiones.any { textoNormalizado.contains(it) } -> {
+                seleccionarOpcion(botones[2])
+                avanzarTrasSeleccion()
+            }
+            opcionDExpresiones.any { textoNormalizado.contains(it) } -> {
+                seleccionarOpcion(botones[3])
+                avanzarTrasSeleccion()
+            }
+            continuarExpresiones.any { textoNormalizado.contains(it) } -> {
+                // Comando para saltar pregunta sin responder
+                if (opcionSeleccionada == null) {
+                    countDownTimer?.cancel()
+                    hablar("Pregunta omitida.")
+                    avanzarASiguientePregunta()
+                } else {
+                    hablar("Ya has respondido esta pregunta.")
+                }
+            }
+            else -> {
+                hablar("No se reconoció el comando.")
+            }
+        }
+    }
+    // funcion para omitir pregunta y pasar a la siguiente por voz
+    private fun avanzarTrasSeleccion() {
+        countDownTimer?.cancel()
+        hablar("Respuesta registrada. Avanzando.")
+        avanzarASiguientePregunta()
+    }
+
+
+    private fun seleccionarOpcion(boton: Button) {
+        opcionSeleccionada?.setBackgroundResource(R.drawable.generic_button_selector)
+        boton.setBackgroundColor(Color.parseColor("#00FF41"))
+        opcionSeleccionada = boton
+        hablar("Opción seleccionada")
+    }
+
     // Liberamos el texto a voz una vez que concluyo la actividad
     override fun onDestroy() {
         if (::tts.isInitialized) {

@@ -21,7 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/text_color"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:importantForAccessibility="no" />
 
     <TextView
         android:id="@+id/loading_text"
@@ -30,7 +31,9 @@
         android:text="CARGANDO..."
         android:textColor="@color/text_color"
         android:textSize="22sp"
-        android:fontFamily="@font/vt323" />
+        android:fontFamily="@font/vt323"
+        android:importantForAccessibility="yes"
+        android:contentDescription="Cargando, por favor espera"/>
 
     </LinearLayout>
 
