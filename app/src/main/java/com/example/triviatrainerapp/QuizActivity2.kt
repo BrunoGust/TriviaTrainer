@@ -32,7 +32,7 @@ class QuizActivity2 : AppCompatActivity() {
     private lateinit var preguntas: List<Pregunta>
     private var indicePreguntaActual = 0
     private var countDownTimer: CountDownTimer? = null // VARIABLE PARA ALMACENAR CONTADOR
-    private val tiempoLimite: Long = 45000  // 45 segundos en milisegundos
+    private var tiempoLimite: Long = 30000  // 45 segundos en milisegundos
     private var mensajeInicial: Boolean = true
     private lateinit var tts: TextToSpeech // variable para el manejo del voz a texto
     private var talkBackActivo: Boolean = false // inicialmente considera que el talkback esta desactivado
@@ -56,6 +56,7 @@ class QuizActivity2 : AppCompatActivity() {
                     leerPreguntaYOpciones()
                 }
             }
+            tiempoLimite = 45000
         }
         mostrarPregunta(preguntas[indicePreguntaActual])
         // Configurar UI
