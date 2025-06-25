@@ -36,7 +36,7 @@ class RepasoActivity : AppCompatActivity() {
         parts = listOf(
             TextPart("""
 Eres un generador automático de preguntas tipo trivia para educación. 
-Dado un tema o resumen, tu tarea es crear **12 preguntas tipo trivia** (4 fáciles, 4 medias, 3 difíciles) sobre ese tema.
+Dado un tema o resumen, tu tarea es crear **8 preguntas tipo trivia** (3 fáciles, 3 medias, 2 difíciles) sobre ese tema.
 
 Cada pregunta debe:
 - Tener una sola respuesta correcta
@@ -81,7 +81,7 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
 
         val resumen = intent.getStringExtra("RESUMEN_GENERADO") ?: "Resumen no disponible"
         val tema = intent.getStringExtra("TEMA_ORIGINAL") ?: ""
-
+        //Log.d("TEMA_DEBUG","El tema es $tema!")
 
         // Nuevo modelo para preguntas
 
@@ -124,7 +124,7 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
 
             lifecycleScope.launch {
                 try {
-                    val response = modeloPreguntas.generateContent("Genera 11 preguntas de trivia sobre el siguiente resumen:\n\n$resumen")
+                    val response = modeloPreguntas.generateContent("Genera 8 preguntas de trivia sobre el siguiente resumen:\n\n$resumen")
                     val textoPreguntas = response.text ?: ""
 
                     val preguntasParseadas = extraerTodasLasPreguntas(textoPreguntas)
@@ -137,6 +137,7 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
                     val intent = Intent(this@RepasoActivity, LoadingScreenActivity::class.java).apply {
                         putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, QuizActivity2::class.java.name)
                         putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO QUIZ...")
+                        putExtra("TEMA",tema)
                     }
                     startActivity(intent)
                     finish()
