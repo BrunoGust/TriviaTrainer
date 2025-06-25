@@ -1,12 +1,19 @@
 package com.example.triviatrainerapp
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -28,6 +35,8 @@ import com.google.ai.client.generativeai.type.generationConfig
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
+import com.example.triviatrainerapp.MainActivity.Companion.KEY_LOGGED_IN_USERNAME
+import com.example.triviatrainerapp.MainActivity.Companion.PREFS_NAME
 
 class InicioActivity : AppCompatActivity() {
 
@@ -40,6 +49,12 @@ class InicioActivity : AppCompatActivity() {
     private lateinit var btnAssistant: ImageButton
     private var mensajeInicial: Boolean = true
 
+    // Referencias a los componentes del overlay de carga
+    private lateinit var loadingOverlay: FrameLayout
+    private lateinit var loadingMessageTextView: TextView
+
+    // Declarar SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
 
     val config = generationConfig {
         temperature = 0.0f
@@ -98,6 +113,8 @@ class InicioActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_inicio)
 
+        // Inicializar SharedPreferences
+        sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
         editTextTheme = findViewById(R.id.input_tema)
         voiceButton = findViewById(R.id.voz_btn)
@@ -105,6 +122,9 @@ class InicioActivity : AppCompatActivity() {
         welcomeTextView = findViewById(R.id.textView4)
         salirBtn = findViewById(R.id.salir_btn)
         btnAssistant = findViewById(R.id.buttonHelpInicio)
+
+        loadingOverlay = findViewById(R.id.loading_overlay)
+        loadingMessageTextView = findViewById(R.id.loading_message)
 
         val username = intent.getStringExtra(MainActivity.EXTRA_USERNAME)
         if (username != null && username.isNotEmpty()) {
@@ -148,6 +168,7 @@ class InicioActivity : AppCompatActivity() {
 
         // 4. Configurar el listener para el botón Generar Quiz (ejemplo)
         generateQuizButton.setOnClickListener {
+            showLoadingOverlay("Generando información del tema")
             val theme = editTextTheme.text.toString().trim()
             if (theme.isNotEmpty()) {
 
@@ -155,28 +176,26 @@ class InicioActivity : AppCompatActivity() {
                     try {
                         val response = generativeModel.generateContent("El tema es: $theme")
                         val resumen = response.text
-/*
-                        val intent = Intent(this@InicioActivity, RepasoActivity::class.java).apply {
-                            putExtra("RESUMEN_GENERADO", resumen)
-                            putExtra("TEMA_ORIGINAL", theme)
-                        }
-                        startActivity(intent)
-                        */
 
                         //Toast.makeText(this, "Generando quiz sobre: $theme", Toast.LENGTH_SHORT).show()
-                        // Aquí es donde llamarías a tu pantalla de carga
-                        val loadingIntent = Intent(this@InicioActivity, LoadingScreenActivity::class.java).apply {
-                            putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, RepasoActivity::class.java.name)
+
+                        val loadingIntent = Intent(this@InicioActivity, RepasoActivity::class.java).apply {
+                            //putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, RepasoActivity::class.java.name)
                             // También podrías pasar el 'theme' si lo necesitas en la siguiente Activity
-                            putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO INFORMACION...")
+                            //putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO INFORMACION...")
                             putExtra(MainActivity.EXTRA_USERNAME,username)
                             putExtra("RESUMEN_GENERADO", resumen)
                             putExtra("TEMA_ORIGINAL", theme)
                         } // Asegúrate que esta clase exista y esté en el paquete correcto
                         startActivity(loadingIntent)
+                        //hideLoadingOverlay()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            hideLoadingOverlay()
+                        }, 1000L)
                         // No llames finish() aquí si quieres que InicioActivity permanezca en la pila
 
                     } catch (e: Exception) {
+                        hideLoadingOverlay()
                         e.printStackTrace()
                         Toast.makeText(this@InicioActivity, "Error al generar el resumen", Toast.LENGTH_SHORT).show()
                     }
@@ -185,19 +204,47 @@ class InicioActivity : AppCompatActivity() {
 
 
             } else {
+                hideLoadingOverlay()
                 Toast.makeText(this, "Por favor, ingresa o indica un tema.", Toast.LENGTH_SHORT)
                     .show()
             }
         }
 
         salirBtn.setOnClickListener {
-            val exitIntent = Intent(this, LoadingScreenActivity::class.java).apply {
-                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, MainActivity::class.java.name)
-                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Te extrañaremos $username :(\nCERRANDO SESION...")
-            }
-            startActivity(exitIntent)
-            finish()
+            AlertDialog.Builder(this)
+                .setTitle("Cerrar Sesión") // Título del diálogo
+                .setMessage("¿Estás seguro de que deseas cerrar tu sesión, $username?") // Mensaje
+                .setPositiveButton("Salir") { dialog, which ->
+                    showLoadingOverlay("CERRANDO SESIÓN...")
+                    // Eliminar el nombre de usuario de SharedPreferences
+                    val editor = sharedPreferences.edit()
+                    editor.remove(KEY_LOGGED_IN_USERNAME) // O editor.clear() para borrar todo
+                    editor.apply()
+                    // Redirigir a MainActivity y limpiar la pila de actividades
+                    val intent = Intent(this, MainActivity::class.java)
+                    // Estas flags aseguran que todas las Activities anteriores se cierren
+                    // y MainActivity se inicie como una nueva tarea.
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        startActivity(intent)
+
+                        Toast.makeText(
+                            this,
+                            "Te extrañaremos mucho $username :( \n Sesión Cerrada",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        finish() // Cierra InicioActivity
+                        hideLoadingOverlay()
+                    }, 1000L)
+                }
+                .setNegativeButton("Cancelar") { dialog, which -> // Botón "Negativo" (cancelar)
+                    dialog.dismiss()
+                    Toast.makeText(this, "Cierre de sesión cancelado. Gracias por quedarte!", Toast.LENGTH_SHORT).show()
+                }
+                .setIcon(android.R.drawable.ic_dialog_alert) // Opcional: añade un icono de advertencia
+                .show()
         }
 
 
@@ -246,6 +293,16 @@ class InicioActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+    // Funciones para controlar la visibilidad del overlay de carga
+    private fun showLoadingOverlay(message: String) {
+        loadingMessageTextView.text = message
+        loadingOverlay.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingOverlay() {
+        loadingOverlay.visibility = View.GONE
     }
 
 }

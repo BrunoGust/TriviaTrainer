@@ -1,7 +1,11 @@
 package com.example.triviatrainerapp
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -21,6 +25,8 @@ import com.google.firebase.database.ValueEventListener
 class MainActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_USERNAME = "extra_username"
+        const val PREFS_NAME = "TriviaTrainerPrefs" // Nombre del archivo de preferencias
+        const val KEY_LOGGED_IN_USERNAME = "loggedInUsername"
     }
 
     private var firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
@@ -31,15 +37,31 @@ class MainActivity : AppCompatActivity() {
     private lateinit var loadingOverlay: FrameLayout
     private lateinit var loadingMessageTextView: TextView
 
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Inicializar SharedPreferences
+        sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+        // *** Verificar si el usuario ya está logeado ***
+        val loggedInUsername = sharedPreferences.getString(KEY_LOGGED_IN_USERNAME, null)
+        if (loggedInUsername != null) {
+            // Si hay un usuario guardado, ir directamente a InicioActivity
+            Log.d("MainActivity", "Usuario encontrado en SharedPreferences: $loggedInUsername. Redirigiendo a InicioActivity.")
+            val intent = Intent(this, InicioActivity::class.java).apply {
+                putExtra(EXTRA_USERNAME, loggedInUsername)
+            }
+            startActivity(intent)
+            finish() // Cierra MainActivity para que el usuario no pueda volver con el botón atrás
+            return // Sale de onCreate para no cargar la UI de login
+        }
+
+
         setContentView(R.layout.activity_main)
-        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }*/
+
         val ingresar_btn: Button = findViewById(R.id.ingresar_btn)
         val usuarioInput: EditText = findViewById(R.id.usuario_input)
         val claveInput: EditText = findViewById(R.id.clave_input)
@@ -81,19 +103,26 @@ class MainActivity : AppCompatActivity() {
                                         if (user.password == password) {
                                             // Contraseña correcta
                                             Toast.makeText(this@MainActivity, "Inicio de sesión exitoso.", Toast.LENGTH_SHORT).show()
+                                            val editor = sharedPreferences.edit()
+                                            editor.putString(KEY_LOGGED_IN_USERNAME, user.username)
+                                            editor.apply() // Guarda los cambios de forma asíncrona
+
                                             val intent = Intent(this@MainActivity, InicioActivity::class.java).apply { // Directo a InicioActivity
                                                 putExtra(EXTRA_USERNAME, user.username)
                                             }
-                                            hideLoadingOverlay()
+
                                             startActivity(intent)
                                             finish()
+                                            hideLoadingOverlay()
                                             loginSuccessful = true // Marcar como exitoso
                                             return // Salir del listener y el bucle
                                         }
                                     } else {
+                                        hideLoadingOverlay()
                                         Log.e("MainActivity", "Failed to deserialize Usuario object for email snapshot: ${userSnapshot.key}. Data: ${userSnapshot.value}")
                                     }
                                 } catch (e: Exception) {
+                                    hideLoadingOverlay()
                                     Log.e("MainActivity", "Error deserializing user data for email snapshot ${userSnapshot.key}: ${e.message}", e)
                                 }
                             }
@@ -122,20 +151,28 @@ class MainActivity : AppCompatActivity() {
                                                         Log.d("MainActivity", "User found by username: ${user.username}, Email: ${user.email}, Pass: ${user.password}")
                                                         if (user.password == password) {
                                                             Toast.makeText(this@MainActivity, "Inicio de sesión exitoso.", Toast.LENGTH_SHORT).show()
+                                                            // *** Guardar el nombre de usuario en SharedPreferences ***
+                                                            val editor = sharedPreferences.edit()
+                                                            editor.putString(KEY_LOGGED_IN_USERNAME, user.username)
+                                                            editor.apply() // Guarda los cambios de forma asíncrona
                                                             val intent = Intent(this@MainActivity, InicioActivity::class.java).apply { // Directo a InicioActivity
                                                                 putExtra(EXTRA_USERNAME, user.username)
                                                             }
                                                             //hideLoadingOverlay()
                                                             startActivity(intent)
-                                                            hideLoadingOverlay()
                                                             finish()
+                                                            Handler(Looper.getMainLooper()).postDelayed({
+                                                                hideLoadingOverlay()
+                                                            },1000L)
                                                             usernameLoginSuccessful = true // Marcar como exitoso
                                                             return // Salir del listener y el bucle
                                                         }
                                                     } else {
+                                                        hideLoadingOverlay()
                                                         Log.e("MainActivity", "Failed to deserialize Usuario object for username snapshot: ${userSnapshot.key}. Data: ${userSnapshot.value}")
                                                     }
                                                 } catch (e: Exception) {
+                                                    hideLoadingOverlay()
                                                     Log.e("MainActivity", "Error deserializing user data for username snapshot ${userSnapshot.key}: ${e.message}", e)
                                                 }
                                             }

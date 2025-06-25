@@ -1,7 +1,11 @@
 package com.example.triviatrainerapp
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -19,6 +23,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.example.triviatrainerapp.MainActivity.Companion.PREFS_NAME // Importar PREFS_NAME
+import com.example.triviatrainerapp.MainActivity.Companion.KEY_LOGGED_IN_USERNAME // Importar KEY_LOGGED_IN_USERNAME
+
 
 
 class RegistroActivity : AppCompatActivity() {
@@ -30,13 +37,16 @@ class RegistroActivity : AppCompatActivity() {
     private lateinit var loadingOverlay: FrameLayout
     private lateinit var loadingMessageTextView: TextView
 
+    // Declarar SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
 
         setContentView(R.layout.activity_registro)
-
+        sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
         val registrar_btn: Button = findViewById(R.id.regsitrar_btn)
         val usuarioInput: EditText = findViewById(R.id.usuario_input)
@@ -105,14 +115,21 @@ class RegistroActivity : AppCompatActivity() {
             newRef.setValue(u)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Usuario registrado exitosamente.", Toast.LENGTH_SHORT).show()
+                    // *** Guardar el nombre de usuario en SharedPreferences después de un registro exitoso ***
+                    val editor = sharedPreferences.edit()
+                    editor.putString(KEY_LOGGED_IN_USERNAME, u.username)
+                    editor.apply()
                     val intent = Intent(this, InicioActivity::class.java).apply { // Directo a InicioActivity
                         putExtra(MainActivity.EXTRA_USERNAME, u.username)
                     }
                     startActivity(intent)
-                    hideLoadingOverlay()
                     finish()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        hideLoadingOverlay()
+                    },1000L)
                 }
                 .addOnFailureListener { e ->
+                    hideLoadingOverlay()
                     Toast.makeText(this, "Error al registrar: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         } else {
