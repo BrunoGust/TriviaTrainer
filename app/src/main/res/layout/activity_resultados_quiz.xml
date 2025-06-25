@@ -153,7 +153,7 @@
                 android:contentDescription="boton de ayuda" />
             <!-- Botón de Nuevo Quiz-->
         <Button
-            android:id="@+id/buttonResultadosNuevoQuiz"
+            android:id="@+id/buttonEmpezarNuevoQuiz"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/vt323"

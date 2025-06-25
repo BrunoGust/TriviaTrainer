@@ -7,6 +7,7 @@ import android.speech.RecognizerIntent
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -22,6 +23,7 @@ class ResultadosQuizActivity : AppCompatActivity() {
     private lateinit var preguntas: List<Pregunta>
 
     private lateinit var btnAssistant: ImageButton
+    val fuentes: MutableSet<String> = mutableSetOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,14 +61,15 @@ class ResultadosQuizActivity : AppCompatActivity() {
             val esCorrecta = seleccionUsuario == indiceCorrecto
             if (esCorrecta) correctas++
 
-            // 📄 Construir contenido con formato HTML
+            // Creamos el resultado para las preguntas incorrectas
             val textoResultadoHtml = buildString {
                 append("<b>P${respuesta.idPregunta}:</b> $preguntaTexto<br>")
                 append("<b>Tu respuesta:</b> $textoRespuestaUsuario<br>")
                 if (!esCorrecta) {
+
                     val textoCorrecto = opciones.getOrNull(indiceCorrecto) ?: "No disponible"
                     append("<b><font color='#B00020'>Respuesta correcta:</font></b> $textoCorrecto<br>")
-                    append("<b><font color='#B00020'>Fuente:</font></b> <a href=\"$fuente\"><font color='#000000'>$fuente</font></a>")
+                    //append("<b><font color='#B00020'>Fuente:</font></b> <a href=\"$fuente\"><font color='#000000'>$fuente</font></a>")
                 }
 
             }
@@ -85,7 +88,9 @@ class ResultadosQuizActivity : AppCompatActivity() {
                 setTextColor(if (esCorrecta) Color.parseColor("#004D00") else Color.parseColor("#B00020"))
                 setBackgroundColor(if (esCorrecta) Color.parseColor("#C8E6C9") else Color.parseColor("#FFCDD2"))
             }
-
+            if (fuente.isNotBlank()) { // Agregamos todas las fuentes utilizadas en las preguntas
+                fuentes.add(fuente) // solo se agrega si no existe
+            }
             layoutResultados.addView(textView)
         }
 
@@ -107,6 +112,34 @@ class ResultadosQuizActivity : AppCompatActivity() {
         val botonVoz = findViewById<ImageButton>(R.id.voz_btn_resultados_quiz)
         botonVoz.setOnClickListener {
             iniciarReconocimientoDeVoz()
+        }
+        val botonProfundizarMas = findViewById<Button>(R.id.buttonNuevoQuiz)
+        botonProfundizarMas.setOnClickListener{
+            val dialog = FuentesDialogFragment()
+            dialog.arguments = Bundle().apply {
+                putString("tema", tema)
+                putStringArrayList("fuentes", ArrayList(fuentes))
+            }
+            dialog.show(supportFragmentManager, "FuentesDialog")
+        }
+        // Nuevo Quiz y Salir nos llevan al mismo lugar?
+        val botonSalirQuizResultados = findViewById<Button>(R.id.buttonSalirQuizResultados)
+        botonSalirQuizResultados.setOnClickListener{
+            val intent = Intent(this, LoadingScreenActivity::class.java).apply {
+                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
+                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo al inicio para elegir tema")
+            }
+            startActivity(intent)
+            finish()
+        }
+        val botonNuevoQuiz = findViewById<Button>(R.id.buttonEmpezarNuevoQuiz)
+        botonNuevoQuiz.setOnClickListener{
+            val intent = Intent(this, LoadingScreenActivity::class.java).apply {
+                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
+                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo al inicio para elegir tema")
+            }
+            startActivity(intent)
+            finish()
         }
 
     }
@@ -138,7 +171,7 @@ class ResultadosQuizActivity : AppCompatActivity() {
         val tipo = object : TypeToken<List<Pregunta>>() {}.type
         return Gson().fromJson(json, tipo)
     }
-    private val comandosProfundizar = listOf("profundizar más", "quiero saber más", "más información")
+    private val comandosProfundizar = listOf("profundizar más", "quiero saber más", "más información","quiero saber mas","mas informacion")
     private val comandosSalir = listOf("salir", "nuevo quiz", "intentar de nuevo", "volver al inicio")
     private val VOZ_REQUEST_CODE = 200
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -157,7 +190,7 @@ class ResultadosQuizActivity : AppCompatActivity() {
             comandosSalir.any { texto.contains(it) } -> {
                 val intent = Intent(this, LoadingScreenActivity::class.java).apply {
                     putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
-                    putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo al inicio...")
+                    putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo al inicio para elegir tema")
                 }
                 startActivity(intent)
                 finish()
