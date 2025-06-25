@@ -3,6 +3,7 @@ package com.example.triviatrainerapp
 import android.graphics.Color
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.view.accessibility.AccessibilityEvent
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -84,6 +85,9 @@ class ResultadosQuizActivity : AppCompatActivity() {
 
 
         textViewCantidadCorrectas.text = "OBTUVISTE $correctas DE ${respuestasUsuario.size} CORRECTAS!"
+        // esto enviara el focus del talkback para que lea el numero de preguntas correctas
+        textViewCantidadCorrectas.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+
         textViewCantidadCorrectas.setTextColor(if (correctas == respuestasUsuario.size) Color.parseColor("#90EE90") else Color.RED)
 
         btnAssistant.setOnClickListener {

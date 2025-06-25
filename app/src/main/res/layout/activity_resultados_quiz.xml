@@ -46,12 +46,14 @@
                 android:foreground="@drawable/button_border_green"
                 android:text="@string/salir_btn"
                 android:textColor="@color/text_color"
-                android:textSize="25sp" />
+                android:textSize="24sp"
+                android:contentDescription="Salir"
+                />
         </LinearLayout>
         <TextView
             android:id="@+id/textViewTituloQuiz"
             android:layout_width="match_parent"
-            android:layout_height="87dp"
+            android:layout_height="48dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/vt323"
             android:gravity="center|center_horizontal"
@@ -79,49 +81,71 @@
         <ScrollView
             android:id="@+id/scrollResultados"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_marginTop="16dp"
-            android:fillViewport="true">
+            android:layout_height="450dp"
+            android:layout_marginTop="8dp"
+            android:fillViewport="true"
+            android:contentDescription="Escrolea para ver todas las preguntas">
             <!-- BLOQUE DE RESULTADOS-->
             <LinearLayout
                 android:id="@+id/layoutResultados"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:padding="8dp"
+                android:importantForAccessibility="no"
+                >
 
             </LinearLayout>
         </ScrollView>
-
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:weightSum="10">
+            <!-- Boton para comandos de voz -->
+            <ImageButton
+                android:id="@+id/voz_btn_resultados_quiz"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="10sp"
+                android:background="@drawable/microphone_button_selector"
+                android:contentDescription="Toca dos veces para utilizar algun comando como nuevo quiz y salir."
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_microphono_black"
+                android:layout_weight="1"/>
 
                 <!-- Botón pedir mas informacion-->
                 <Button
                     android:id="@+id/buttonNuevoQuiz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="45dp"
+                    android:layout_marginTop="0dp"
                     android:layout_gravity="right"
                     android:fontFamily="@font/vt323"
                     android:background="@drawable/generic_button_selector"
                     android:foreground="@drawable/button_border_green"
                     android:text="> PROFUNDIZAR MÁS"
                     android:textColor="@color/text_color"
-                    android:textSize="24sp" />
-
+                    android:textSize="24sp"
+                    android:layout_weight="9"
+                    android:contentDescription="Más información"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:weightSum="10">
 
             <!-- Botón de ayuda-->
             <ImageButton
                 android:id="@+id/buttonHelpResultados"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="48dp"
                 android:src="@drawable/help_24px"
                 android:layout_weight="2.5"
                 android:background="@null"
@@ -129,7 +153,7 @@
                 android:contentDescription="boton de ayuda" />
             <!-- Botón de Nuevo Quiz-->
         <Button
-            android:id="@+id/buttonSiguientePreguntaResultados"
+            android:id="@+id/buttonResultadosNuevoQuiz"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/vt323"
@@ -139,7 +163,8 @@
             android:foreground="@drawable/button_border_green"
             android:text="> NUEVO QUIZ"
             android:textColor="@color/text_color"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:contentDescription="Nuevo Quiz"/>
     </LinearLayout>
 
 
