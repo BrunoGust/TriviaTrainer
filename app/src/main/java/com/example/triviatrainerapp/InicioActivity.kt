@@ -188,10 +188,10 @@ class InicioActivity : AppCompatActivity() {
                             putExtra("TEMA_ORIGINAL", theme)
                         } // Asegúrate que esta clase exista y esté en el paquete correcto
                         startActivity(loadingIntent)
-                        //hideLoadingOverlay()
-                        Handler(Looper.getMainLooper()).postDelayed({
+                        hideLoadingOverlay()
+                        /*Handler(Looper.getMainLooper()).postDelayed({
                             hideLoadingOverlay()
-                        }, 1000L)
+                        }, 1000L)*/
                         // No llames finish() aquí si quieres que InicioActivity permanezca en la pila
 
                     } catch (e: Exception) {
