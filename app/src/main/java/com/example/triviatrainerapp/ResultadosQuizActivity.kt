@@ -25,11 +25,14 @@ class ResultadosQuizActivity : AppCompatActivity() {
 
         preguntas = cargarPreguntasDesdeFile()
         btnAssistant = findViewById(R.id.buttonHelpResultados)
-
+        val tema  =intent.getStringExtra("TEMA")
 
         val layoutResultados = findViewById<LinearLayout>(R.id.layoutResultados)
         val textViewCantidadCorrectas = findViewById<TextView>(R.id.textViewCantidadCorrectas)
-
+        val textViewSaludosUsuario = findViewById<TextView>(R.id.textViewsaludoQuizResultados)
+        textViewSaludosUsuario.text = "RESULTADOS"
+        val textViewTema = findViewById<TextView>(R.id.textViewTituloQuiz)
+        textViewTema.text = "Tema: $tema"
         val respuestasUsuario = intent.getParcelableArrayListExtra<RespuestaUsuario>("respuestas_usuario")
 
         if (respuestasUsuario == null || respuestasUsuario.isEmpty()) {

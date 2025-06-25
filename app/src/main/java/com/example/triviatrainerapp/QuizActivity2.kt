@@ -32,16 +32,19 @@ class QuizActivity2 : AppCompatActivity() {
     private lateinit var preguntas: List<Pregunta>
     private var indicePreguntaActual = 0
     private var countDownTimer: CountDownTimer? = null // VARIABLE PARA ALMACENAR CONTADOR
-    private var tiempoLimite: Long = 30000  // 45 segundos en milisegundos
+    private var tiempoLimite: Long = 30000  // 30 segundos en milisegundos
     private var mensajeInicial: Boolean = true
     private lateinit var tts: TextToSpeech // variable para el manejo del voz a texto
     private var talkBackActivo: Boolean = false // inicialmente considera que el talkback esta desactivado
     private val VOZ_REQUEST_CODE = 100// CONSTANTE RECONOCIMIENTO DE VOZ
-
+    private var tema = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_quiz2)
+        // Cargamos la variable del tema para enviarla a los resultados
+        tema = intent.getStringExtra("TEMA") ?: ""
+        Log.d("TEMA_DEBUG_2","El tema es $tema!")
         //Cargar Preguntas de archivo json
         preguntas = cargarPreguntasDesdeJSON()
 
@@ -78,6 +81,7 @@ class QuizActivity2 : AppCompatActivity() {
             val exitIntent = Intent(this, LoadingScreenActivity::class.java).apply {
                 putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
                 putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo a elegir tema para quiz")
+
             }
             startActivity(exitIntent)
             finish()
@@ -233,10 +237,12 @@ class QuizActivity2 : AppCompatActivity() {
 
 
         } else {
+
             val intent = Intent(this, ResultadosQuizActivity::class.java).apply {
                 putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
                 putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "CALCULANDO RESULTADOS...")
                 putParcelableArrayListExtra("respuestas_usuario", ArrayList(respuestasUsuario))
+                putExtra("TEMA",tema) // ENVIAMOS EL TEMA A LA PAGINA DE RESULTADOS
             }
             startActivity(intent)
             finish()// Terminamos el activity
@@ -370,6 +376,7 @@ class QuizActivity2 : AppCompatActivity() {
                 val exitIntent = Intent(this, LoadingScreenActivity::class.java).apply {
                     putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
                     putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo a elegir tema para quiz")
+
                 }
                 hablar("Regresando al inicio.")
                 startActivity(exitIntent)

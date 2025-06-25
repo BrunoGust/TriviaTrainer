@@ -81,7 +81,7 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
 
         val resumen = intent.getStringExtra("RESUMEN_GENERADO") ?: "Resumen no disponible"
         val tema = intent.getStringExtra("TEMA_ORIGINAL") ?: ""
-
+        //Log.d("TEMA_DEBUG","El tema es $tema!")
 
         // Nuevo modelo para preguntas
 
@@ -137,6 +137,7 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
                     val intent = Intent(this@RepasoActivity, LoadingScreenActivity::class.java).apply {
                         putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, QuizActivity2::class.java.name)
                         putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "GENERANDO QUIZ...")
+                        putExtra("TEMA",tema)
                     }
                     startActivity(intent)
                     finish()
