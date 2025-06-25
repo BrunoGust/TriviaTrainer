@@ -22,11 +22,19 @@ import com.google.ai.client.generativeai.type.generationConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.app.Activity
+import android.content.Intent
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import androidx.activity.result.contract.ActivityResultContracts
+
 
 class AssistantDialogFragment : DialogFragment() {
 
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var adapter: ChatAdapter
+    private lateinit var speechLauncher: androidx.activity.result.ActivityResultLauncher<Intent>
+
 
     val systemInstructionAsistente = Content(
         role = "system",
@@ -75,17 +83,59 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
         //  Obtener el ViewModel compartido entre actividades
         val app = requireActivity().application as MyApplication
 
+        speechLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val recognizedText = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                recognizedText?.firstOrNull()?.let { spokenText ->
+                    addMessage(spokenText, isUser = true)
+                    responderConContexto(spokenText)
+                }
+            } else {
+                Toast.makeText(requireContext(), "No se pudo reconocer voz.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
         chatViewModel = ViewModelProvider(
             app, // ViewModelStoreOwner global
             ViewModelProvider.AndroidViewModelFactory.getInstance(app)
         ).get(ChatViewModel::class.java)
 
 
-
         val recyclerView = view.findViewById<RecyclerView>(R.id.chatRecyclerView)
         val input = view.findViewById<EditText>(R.id.userInput)
         val sendButton = view.findViewById<ImageButton>(R.id.sendButton)
         val closeButton = view.findViewById<ImageButton>(R.id.btnCloseAssistant)
+        val voiceButton = view.findViewById<ImageButton>(R.id.voiceButton)
+
+        input.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val hayTexto = !s.isNullOrBlank()
+                sendButton.visibility = if (hayTexto) View.VISIBLE else View.GONE
+                voiceButton.visibility = if (hayTexto) View.GONE else View.VISIBLE
+            }
+
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+
+
+        voiceButton.setOnClickListener {
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-ES")
+                putExtra(RecognizerIntent.EXTRA_PROMPT, "Habla tu mensaje para el asistente")
+            }
+
+            if (SpeechRecognizer.isRecognitionAvailable(requireContext())) {
+                speechLauncher.launch(intent)
+            } else {
+                Toast.makeText(requireContext(), "Reconocimiento de voz no disponible", Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
 
         //  Enlazar adaptador con la lista del ViewModel
