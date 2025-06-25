@@ -159,13 +159,14 @@ class QuizActivity2 : AppCompatActivity() {
             findViewById<Button>(R.id.buttonRespuesta3),
             findViewById<Button>(R.id.buttonRespuesta4)
         )
-        val textViewTiempo = findViewById<TextView>(R.id.textViewTiempoNumero)
-
+        val textViewTiempoNumero = findViewById<TextView>(R.id.textViewTiempoNumero)
+        val textViewTiempo = findViewById<TextView>(R.id.textViewTiempo)
         pregunta.text = "P${preguntaData.id}: ${preguntaData.pregunta}"
         botones.forEachIndexed { i, btn ->
             btn.text = "${'a' + i}) ${preguntaData.opciones[i]}"
             btn.setBackgroundResource(R.drawable.generic_button_selector)
         }
+        textViewTiempo.text = "Pregunta ${indicePreguntaActual + 1} de ${preguntas.size}"
 
         opcionSeleccionada = null
 
@@ -178,11 +179,11 @@ class QuizActivity2 : AppCompatActivity() {
                 val segundosRestantes = millisUntilFinished / 1000
                 val minutos = segundosRestantes / 60
                 val segundos = segundosRestantes % 60
-                textViewTiempo.text = String.format("%02d:%02d", minutos, segundos)
+                textViewTiempoNumero.text = String.format("%02d:%02d", minutos, segundos)
             }
 
             override fun onFinish() {
-                textViewTiempo.text = "00:00"
+                textViewTiempoNumero.text = "00:00"
                 // Si no se seleccionó respuesta, continuar
                 if (opcionSeleccionada == null) {
                     avanzarASiguientePregunta()

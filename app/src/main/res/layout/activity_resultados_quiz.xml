@@ -46,7 +46,8 @@
                 android:foreground="@drawable/button_border_green"
                 android:text="@string/salir_btn"
                 android:textColor="@color/text_color"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:contentDescription="Salir"/>
         </LinearLayout>
         <TextView
             android:id="@+id/textViewTituloQuiz"
