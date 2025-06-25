@@ -50,15 +50,13 @@ class AssistantDialogFragment : DialogFragment() {
 
 
 
-
-
     val systemInstructionAsistente = Content(
         role = "system",
         parts = listOf(
             TextPart("""
 Eres un asistente inteligente dentro de una aplicación educativa para crear quizzes. Tu objetivo es ayudar al usuario a usar la aplicación de manera efectiva, explicando las funciones disponibles y guiándolo según la pantalla en la que se encuentre.
 
-Tu tono debe ser claro, amigable, directo y didáctico. Utiliza lenguaje sencillo y evita respuestas excesivamente técnicas. Si el usuario tiene dudas sobre cómo generar un quiz, interpretar el resumen, o responder preguntas, debes explicarlo con ejemplos simples. Si no sabes algo con certeza, di que no estás seguro.
+Tu tono debe ser claro, amigable, directo y didáctico. Utiliza lenguaje sencillo y evita respuestas excesivamente técnicas. Si el usuario tiene dudas sobre cómo generar un quiz, empezar el quiz, o responder preguntas, debes explicarlo con ejemplos simples. Si no sabes algo con certeza, di que no estás seguro.
 
 Nunca salgas del rol de asistente de la app. No des información no relacionada con el funcionamiento de la aplicación.
 
@@ -217,7 +215,7 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
         mostrarMensajeInicial()
         val mostrarBienvenida = arguments?.getBoolean("autoBienvenida", false) == true
         if (mostrarBienvenida && chatViewModel.messages.isEmpty()) {
-            val mensaje = "Hola, soy tu asistente virtual. Estoy aquí para ayudarte a usar la aplicación. ¿En qué puedo ayudarte?"
+            val mensaje = "Hola, soy tu asistente virtual de TriviaTrainer. Estoy aquí para ayudarte a usar la aplicación y resolver cualquier duda que tengas. Si me necesitas más adelante puedes llamarme haciendo clic en el botón con un signo de interrogación ( ? ). Ahora dime ¿En qué puedo ayudarte hoy?"
             addMessage(mensaje, isUser = false)
 
         }
@@ -272,7 +270,7 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
         val mensajeInicial = arguments?.getBoolean("mensajeInicial", false) == true
         if(mensajeInicial){
             if (pantalla=="quiz") {
-                val mensaje = "Selecciona una respuesta y presiona 'Siguiente Pregunta'. Puedes salir en cualquier momento."
+                val mensaje = "Para responder una pregunta debes seleccionar una respuesta y presionar 'Siguiente Pregunta'. Si tienes alguna duda, házmela saber."
                 addMessage(mensaje, isUser = false)
             }
         }
@@ -283,10 +281,10 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
         val pantalla = arguments?.getString("pantalla") ?: "general"
 
         val contexto = when (pantalla) {
-            "inicio" -> "Estás ayudando al usuario desde la pantalla de Inicio. El usuario escribe o dice un tema para generar información para repasar antes de empezar el quiz y luego tiene hacer clic en el botón 'GENERAR QUIZ' ."
-            "repaso" -> "Estás ayudando al usuario desde la pantalla de Repaso. El usuario ya tiene un resumen de un tema y pronto podrá empezar el quiz haciendo clic en el botón 'Empezar quiz'."
-            "quiz" -> "Estás en la pantalla del Quiz. El usuario está respondiendo preguntas de trivia."
-            "resultados" -> "Estás en la pantalla de resultados. El usuario ya terminó de responder las preguntas. Ofrece volver a la pantalla de inicio para generar un nuevo quiz"
+            "inicio" -> "Estás ayudando al usuario desde la pantalla de Inicio. El usuario puede ingresar un tema escribiendo en la entrada de texto o decirlo haciendo clic en el ícono del micrófono. Luego tiene que hacer clic en el botón 'GENERAR QUIZ'."
+            "repaso" -> "Estás ayudando al usuario desde la pantalla de Repaso. El usuario tiene disponible un resumen del tema para repasar y pronto podrá empezar el quiz haciendo clic en el botón 'Empezar quiz'. Si quiere cambiar de tema tendrá que hacer clic en el botón 'Volver' ."
+            "quiz" -> "Estás en la pantalla del Quiz. El usuario está respondiendo preguntas de trivia. Para responder una pregunta debe seleccionar una respuesta y presionar 'Siguiente Pregunta'. También lo puede hacer por comando de voz haciendo clic en el micrófono y diciendo 'opción a' por ejemplo."
+            "resultados" -> "Estás en la pantalla de resultados. El usuario ya terminó de responder las preguntas. Puede hacer clic en 'PROFUNDIZAR MÁS' para obtener más información sobre el tema del quiz. También puede volver a la pantalla de inicio para generar un nuevo quiz haciendo clic en 'NUEVO QUIZ'."
             else -> "Estás asistiendo al usuario en la aplicación TriviaTrainer."
         }
 
