@@ -37,6 +37,7 @@
                 android:textColor="@color/text_color"
                 android:textSize="20dp"
                 android:fontFamily="@font/vt323"
+                android:importantForAccessibility="no"
                 />
 
             <Button
@@ -96,7 +97,8 @@
             android:text="¿Listo para empezar? :)"
             android:textAlignment="center"
             android:textColor="@color/text_color"
-            android:textSize="28sp" />
+            android:textSize="28sp"
+            android:importantForAccessibility="no"/>
 
 
         <LinearLayout
@@ -135,7 +137,8 @@
                 android:gravity="center"
                 android:text="> Empezar Quiz!"
                 android:textColor="@color/text_color"
-                android:textSize="28sp" />
+                android:textSize="28sp"
+                android:contentDescription="Presione dos veces para iniciar el quiz"/>
         </LinearLayout>
 
     </LinearLayout>

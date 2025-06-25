@@ -64,20 +64,22 @@
             android:shadowDx="15"
             android:shadowDy="15"
             android:shadowRadius="25"
-            android:text="@string/nuevo_quizz"
+            android:text="TriviaTrainer"
             android:textColor="@color/text_color"
-            android:textSize="64sp" />
+            android:textSize="52sp"
+            android:importantForAccessibility="no"/>
 
         <TextView
             android:id="@+id/textViewIndicacionesNuevoQuiz"
             android:layout_width="332dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70sp"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="10sp"
             android:fontFamily="@font/vt323"
             android:text="INDICA O INGRESA UN TEMA PARA TU QUIZ"
             android:textColor="@color/text_color"
-            android:textSize="22sp" />
+            android:textSize="32sp"
+            android:importantForAccessibility="no"/>
 
         <EditText
             android:id="@+id/input_tema"
@@ -94,7 +96,8 @@
             android:textColorHint="@color/placeholder_text"
             android:textSize="20sp"
             android:scrollbars="vertical"
-            android:overScrollMode="always"/>
+            android:overScrollMode="always"
+            android:contentDescription="Escribe aqui el tema"/>
 
 
         <LinearLayout
@@ -113,7 +116,8 @@
                 android:paddingEnd="10dp"
                 android:text="PRESIONA PARA INGRESAR UN TEMA"
                 android:textColor="@color/text_color"
-                android:textSize="21sp" />
+                android:textSize="21sp"
+                android:importantForAccessibility="no"/>
 
             <ImageButton
                 android:id="@+id/voz_btn"
@@ -121,7 +125,7 @@
                 android:layout_height="48dp"
                 android:layout_marginRight="10sp"
                 android:background="@drawable/microphone_button_selector"
-                android:contentDescription="Grabar voz"
+                android:contentDescription="Presiona 2 veces para ingresar el tema"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/baseline_mic_24" />
@@ -164,7 +168,8 @@
                 android:foreground="@drawable/button_border_green"
                 android:text="@string/generar_quiz"
                 android:textColor="@color/text_color"
-                android:textSize="32sp" />
+                android:textSize="32sp"
+                android:contentDescription="boton generar quiz"/>
         </LinearLayout>
 
 
