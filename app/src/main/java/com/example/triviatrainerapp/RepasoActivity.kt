@@ -17,6 +17,8 @@ import java.io.File
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
+import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.reflect.TypeToken
@@ -30,6 +32,10 @@ class RepasoActivity : AppCompatActivity() {
     private lateinit var welcomeTextView: TextView
 
     private lateinit var btnAssistant: ImageButton
+
+    // Referencias a los componentes del overlay de carga
+    private lateinit var loadingOverlay: FrameLayout
+    private lateinit var loadingMessageTextView: TextView
 
     val systemInstructionPreguntas = Content(
         role = "system",
@@ -72,6 +78,9 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_repaso)
+
+        loadingOverlay = findViewById(R.id.loading_overlay)
+        loadingMessageTextView = findViewById(R.id.loading_message)
 /*
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -120,8 +129,9 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
         }
 
         button.setOnClickListener {
-            Toast.makeText(this, "Generando preguntas, espera un momento...", Toast.LENGTH_SHORT).show()
 
+            //Toast.makeText(this, "Generando preguntas, espera un momento...", Toast.LENGTH_SHORT).show()
+            showLoadingOverlay("GENERANDO PREGUNTAS, ESPERA UN MOMENTO...")
             lifecycleScope.launch {
                 try {
                     val response = modeloPreguntas.generateContent("Genera 8 preguntas de trivia sobre el siguiente resumen:\n\n$resumen")
@@ -141,8 +151,10 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
                     }
                     startActivity(intent)
                     finish()
+                    hideLoadingOverlay()
 
                 } catch (e: Exception) {
+                    hideLoadingOverlay()
                     e.printStackTrace()
                     Toast.makeText(this@RepasoActivity, "Error generando preguntas", Toast.LENGTH_SHORT).show()
                 }
@@ -159,9 +171,24 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
             dialog.show(supportFragmentManager, "AssistantDialog")
         }
 
+        val btnVolver: Button = findViewById(R.id.button)
+
+        btnVolver.setOnClickListener {
+            val intent = Intent(this@RepasoActivity, InicioActivity::class.java)
+            startActivity(intent)
+        }
 
 
 
+
+    }
+    private fun showLoadingOverlay(message: String) {
+        loadingMessageTextView.text = message
+        loadingOverlay.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingOverlay() {
+        loadingOverlay.visibility = View.GONE
     }
 }
 
