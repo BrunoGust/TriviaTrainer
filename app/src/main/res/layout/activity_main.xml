@@ -38,7 +38,8 @@
             android:shadowRadius="25"
             android:text="Acceso a Trivia Trainer"
             android:textColor="@color/text_color"
-            android:textSize="64sp" />
+            android:textSize="64sp"
+            android:contentDescription="Pantalla de Login"/>
 
         <TextView
             android:id="@+id/usuario_label"
@@ -49,6 +50,7 @@
             android:textColor="@color/text_color"
             android:textSize="35sp"
             android:fontFamily="@font/vt323"
+            android:importantForAccessibility="no"
             />
 
         <EditText
@@ -64,6 +66,7 @@
             android:textColor="@color/white"
             android:fontFamily="@font/vt323"
             android:textSize="30sp"
+            android:contentDescription="ingresa tu usuario"
             />
 
         <TextView
@@ -76,6 +79,7 @@
             android:textColor="@color/text_color"
             android:textSize="35sp"
             android:fontFamily="@font/vt323"
+            android:importantForAccessibility="no"
             />
 
         <EditText
@@ -91,6 +95,7 @@
             android:textColorHint="#9900FF00"
             android:fontFamily="@font/vt323"
             android:textSize="30sp"
+            android:contentDescription="ingresa tu contraseña"
             />
 
         <Button
@@ -109,7 +114,8 @@
             android:text="@string/ingresar_btn"
             android:textColor="@color/text_color"
             android:textColorLink="@color/border_color"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:contentDescription="Ingresar"/>
 
         <Button
             android:id="@+id/registrar_btn"
@@ -127,7 +133,8 @@
             android:text="@string/registrar_btn"
             android:textColor="@color/text_color"
             android:textColorLink="@color/border_color"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:contentDescription="Registrate aqui"/>
     </LinearLayout>
 
 

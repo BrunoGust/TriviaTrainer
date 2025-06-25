@@ -40,7 +40,8 @@
             android:shadowRadius="25"
             android:text="¡Registrate aquí!"
             android:textColor="@color/text_color"
-            android:textSize="64sp" />
+            android:textSize="64sp"
+            android:importantForAccessibility="no"/>
 
 
         <TextView
@@ -51,7 +52,8 @@
             android:fontFamily="@font/vt323"
             android:text="@string/usuario_label"
             android:textColor="@color/text_color"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:importantForAccessibility="no"/>
 
         <EditText
             android:id="@+id/usuario_input"
@@ -64,7 +66,8 @@
             android:hint=" "
             android:inputType="text"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:contentDescription="Ingresa tu nombre de usuario"/>
 
 
         <TextView
@@ -75,7 +78,8 @@
             android:fontFamily="@font/vt323"
             android:text="@string/email_label"
             android:textColor="@color/text_color"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:importantForAccessibility="no"/>
 
         <EditText
             android:id="@+id/email_input"
@@ -88,7 +92,8 @@
             android:hint=" "
             android:inputType="textEmailAddress"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:contentDescription="ingresa tu correo"/>
 
 
         <TextView
@@ -99,7 +104,8 @@
             android:fontFamily="@font/vt323"
             android:text="@string/usuario_pass"
             android:textColor="@color/text_color"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:importantForAccessibility="no"/>
 
         <EditText
             android:id="@+id/clave_input"
@@ -112,7 +118,9 @@
             android:hint=""
             android:inputType="textPassword"
             android:textColorHint="#9900FF00"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:contentDescription="ingresa tu contraseña"
+            />
 
 
 
@@ -124,7 +132,8 @@
             android:fontFamily="@font/vt323"
             android:text="@string/confirmar_clave_label"
             android:textColor="@color/text_color"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:importantForAccessibility="no"/>
 
         <EditText
             android:id="@+id/confirmar_clave_input"
@@ -137,7 +146,8 @@
             android:hint=""
             android:inputType="textPassword"
             android:textColorHint="#9900FF00"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:contentDescription="vuelve a ingresar tu contraseña"/>
 
         <Button
             android:id="@+id/regsitrar_btn"
@@ -155,7 +165,8 @@
             android:text="@string/registrar_btn"
             android:textColor="@color/text_color"
             android:textColorLink="@color/border_color"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:contentDescription="Registrar"/>
 
         <Button
             android:id="@+id/volver_btn"
@@ -173,7 +184,8 @@
             android:text=" > IR AL INICIO "
             android:textColor="@color/text_color"
             android:textColorLink="@color/border_color"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:contentDescription="volver al inicio"/>
     </LinearLayout>
 
     <!-- Overlay de Carga -->
