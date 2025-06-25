@@ -36,7 +36,7 @@
                 android:layout_height="48dp"
                 android:layout_marginRight="10sp"
                 android:background="@drawable/microphone_button_selector"
-                android:contentDescription="Toca dos veces para responder la pregunta por voz. Espera que termine la narración de la pregunta."
+                android:contentDescription="Toca dos veces para responder la pregunta por voz."
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icon_microphono_black" />

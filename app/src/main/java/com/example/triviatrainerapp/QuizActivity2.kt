@@ -182,13 +182,11 @@ class QuizActivity2 : AppCompatActivity() {
         // Leeremos la pregunta y respuestas una vez que cambie a la siguiente pregunta
         if(talkBackActivo){
             leerPreguntaYOpciones()
+            /*
             // Enfocar el botón de voz al cambiar de pregunta para que no lea el nombre de la app
             val botonVoz = findViewById<ImageButton>(R.id.voz_btn_quiz2)
-            if (indicePreguntaActual >= 1) {
-                botonVoz.contentDescription = "Presione dos veces para responder"
-            }
             botonVoz.sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent.TYPE_VIEW_FOCUSED)
-
+            */
         }
     }
     private fun avanzarASiguientePregunta() {
@@ -217,7 +215,10 @@ class QuizActivity2 : AppCompatActivity() {
 
         indicePreguntaActual++
         if (indicePreguntaActual < preguntas.size) {
+
             mostrarPregunta(preguntas[indicePreguntaActual])
+
+
         } else {
             val intent = Intent(this, ResultadosQuizActivity::class.java).apply {
                 putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
