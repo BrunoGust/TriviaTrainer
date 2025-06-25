@@ -132,7 +132,8 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
                 val recognizedText = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 recognizedText?.firstOrNull()?.let { spokenText ->
                     addMessage(spokenText, isUser = true)
-                    responderConContexto(spokenText)
+                    //responderConContexto(spokenText)
+                    simulateAssistantResponse(spokenText)
                 }
             } else {
                 Toast.makeText(requireContext(), "No se pudo reconocer voz.", Toast.LENGTH_SHORT).show()
@@ -168,6 +169,10 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
             vozActiva = !vozActiva
             prefs.edit().putBoolean(PREFS_KEY_VOZ, vozActiva).apply()
             actualizarIconoVoz()
+            // Si desactiva la voz mientras está hablando, detenerla
+            if (!vozActiva && ::tts.isInitialized && tts.isSpeaking) {
+                tts.stop()
+            }
         }
 
 
@@ -198,8 +203,8 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
             if (userMessage.isNotEmpty()) {
                 addMessage(userMessage, isUser = true)
                 input.text.clear()
-                //simulateAssistantResponse(userMessage)
-                responderConContexto(userMessage)
+                simulateAssistantResponse(userMessage)
+                //responderConContexto(userMessage)
             }
         }
 
