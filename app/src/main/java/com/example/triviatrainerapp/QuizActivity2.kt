@@ -184,7 +184,11 @@ class QuizActivity2 : AppCompatActivity() {
             leerPreguntaYOpciones()
             // Enfocar el botón de voz al cambiar de pregunta para que no lea el nombre de la app
             val botonVoz = findViewById<ImageButton>(R.id.voz_btn_quiz2)
+            if (indicePreguntaActual >= 1) {
+                botonVoz.contentDescription = "Presione dos veces para responder"
+            }
             botonVoz.sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent.TYPE_VIEW_FOCUSED)
+
         }
     }
     private fun avanzarASiguientePregunta() {
