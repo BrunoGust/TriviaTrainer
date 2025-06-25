@@ -71,6 +71,16 @@ class QuizActivity2 : AppCompatActivity() {
             iniciarReconocimientoDeVoz()
         }
         val btnSalir = findViewById<Button>(R.id.buttonSalirQuiz)
+        // hacer clic en salir nos lleva a elegir tema del quiz
+        btnSalir.setOnClickListener {
+            val exitIntent = Intent(this, LoadingScreenActivity::class.java).apply {
+                putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
+                putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo a elegir tema para quiz")
+            }
+            startActivity(exitIntent)
+            finish()
+
+        }
         val btnSiguiente = findViewById<Button>(R.id.buttonSiguientePregunta)
 
         val btnHelp = findViewById<ImageButton>(R.id.buttonHelp)
@@ -301,6 +311,10 @@ class QuizActivity2 : AppCompatActivity() {
     private val continuarExpresiones = listOf(
         "siguiente", "continuar", "avanzar", "próxima", "siguiente pregunta"
     )
+    private val salirExpresiones = listOf(
+        "salir", "nuevo quiz", "iniciar de nuevo", "volver al inicio"
+    )
+
     private fun normalizarTexto(texto: String): String {
         return texto.lowercase()
     }
@@ -348,6 +362,17 @@ class QuizActivity2 : AppCompatActivity() {
                     hablar("Ya has respondido esta pregunta.")
                 }
             }
+            // verificar comandos para salir
+            salirExpresiones.any { textoNormalizado.contains(it) } -> {
+                val exitIntent = Intent(this, LoadingScreenActivity::class.java).apply {
+                    putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
+                    putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo a elegir tema para quiz")
+                }
+                hablar("Regresando al inicio.")
+                startActivity(exitIntent)
+                finish()
+            }
+
             else -> {
                 hablar("No se reconoció el comando.")
             }
