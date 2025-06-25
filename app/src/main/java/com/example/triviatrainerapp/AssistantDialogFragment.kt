@@ -23,10 +23,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.activity.result.contract.ActivityResultContracts
+import android.speech.tts.TextToSpeech
+import java.util.Locale
+
 
 
 class AssistantDialogFragment : DialogFragment() {
@@ -34,6 +38,18 @@ class AssistantDialogFragment : DialogFragment() {
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var adapter: ChatAdapter
     private lateinit var speechLauncher: androidx.activity.result.ActivityResultLauncher<Intent>
+    private lateinit var tts: TextToSpeech
+    private var ttsReady = false
+    private var mensajePendiente: String? = null
+    private var ttsEnabled = true
+    private lateinit var toggleVoiceButton: ImageButton
+    private var vozActiva = true
+    private val PREFS_NAME = "assistant_prefs"
+    private val PREFS_KEY_VOZ = "voz_activada"
+
+
+
+
 
 
     val systemInstructionAsistente = Content(
@@ -80,6 +96,33 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
     ): View {
         val view = inflater.inflate(R.layout.fragment_assistant_dialog, container, false)
 
+    //  Primero inicializas el botón
+        toggleVoiceButton = view.findViewById(R.id.buttonToggleVoice)
+
+    //  Luego recuperas preferencias
+        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        vozActiva = prefs.getBoolean(PREFS_KEY_VOZ, true)
+
+    //  Y actualizas su icono
+        actualizarIconoVoz()
+
+
+
+        tts = TextToSpeech(requireContext()) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                tts.language = Locale("es", "ES")
+                ttsReady = true
+
+                // Si había un mensaje pendiente, hablarlo ahora
+                mensajePendiente?.let {
+                    tts.speak(it, TextToSpeech.QUEUE_FLUSH, null, null)
+                    mensajePendiente = null
+                }
+            }
+        }
+
+
+
         //  Obtener el ViewModel compartido entre actividades
         val app = requireActivity().application as MyApplication
 
@@ -120,6 +163,13 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
 
             override fun afterTextChanged(s: android.text.Editable?) {}
         })
+
+        toggleVoiceButton.setOnClickListener {
+            vozActiva = !vozActiva
+            prefs.edit().putBoolean(PREFS_KEY_VOZ, vozActiva).apply()
+            actualizarIconoVoz()
+        }
+
 
 
         voiceButton.setOnClickListener {
@@ -164,6 +214,7 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
         if (mostrarBienvenida && chatViewModel.messages.isEmpty()) {
             val mensaje = "Hola, soy tu asistente virtual. Estoy aquí para ayudarte a usar la aplicación. ¿En qué puedo ayudarte?"
             addMessage(mensaje, isUser = false)
+
         }
 
 
@@ -178,7 +229,26 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
 
         // Desplazar al último mensaje
         view?.findViewById<RecyclerView>(R.id.chatRecyclerView)?.scrollToPosition(chatViewModel.messages.size - 1)
+
+        // Si es mensaje del asistente, hablarlo
+        if (!isUser && ttsEnabled && vozActiva) {
+            if (ttsReady && ::tts.isInitialized) {
+                tts.speak(message, TextToSpeech.QUEUE_FLUSH, null, null)
+            } else {
+                mensajePendiente = message
+            }
+        }
+
     }
+
+    private fun actualizarIconoVoz() {
+        if (::toggleVoiceButton.isInitialized) {
+            val icon = if (vozActiva) R.drawable.ic_volume_on else R.drawable.ic_volume_off
+            toggleVoiceButton.setImageResource(icon)
+        }
+    }
+
+
 
     private fun simulateAssistantResponse(userInput: String) {
         val response = when {
@@ -208,7 +278,7 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
         val pantalla = arguments?.getString("pantalla") ?: "general"
 
         val contexto = when (pantalla) {
-            "inicio" -> "Estás ayudando al usuario desde la pantalla de Inicio. El usuario escribe o dice un tema para generar información para repasar antes de empezar el quiz."
+            "inicio" -> "Estás ayudando al usuario desde la pantalla de Inicio. El usuario escribe o dice un tema para generar información para repasar antes de empezar el quiz y luego tiene hacer clic en el botón 'GENERAR QUIZ' ."
             "repaso" -> "Estás ayudando al usuario desde la pantalla de Repaso. El usuario ya tiene un resumen de un tema y pronto podrá empezar el quiz haciendo clic en el botón 'Empezar quiz'."
             "quiz" -> "Estás en la pantalla del Quiz. El usuario está respondiendo preguntas de trivia."
             "resultados" -> "Estás en la pantalla de resultados. El usuario ya terminó de responder las preguntas. Ofrece volver a la pantalla de inicio para generar un nuevo quiz"
@@ -228,6 +298,8 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
                 val result = assistantModel.generateContent(prompt)
                 val respuesta = result.text ?: "Lo siento, no tengo una respuesta ahora."
                 addMessage(respuesta, isUser = false)
+
+
             } catch (e: Exception) {
                 addMessage("Hubo un error al responder con el asistente.", isUser = false)
             }
@@ -244,4 +316,13 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
         dialog?.window?.setGravity(Gravity.BOTTOM)
 
     }
+
+    override fun onDestroyView() {
+        if (::tts.isInitialized) {
+            tts.stop()
+            tts.shutdown()
+        }
+        super.onDestroyView()
+    }
+
 }

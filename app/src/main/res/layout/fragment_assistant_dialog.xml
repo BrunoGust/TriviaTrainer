@@ -6,14 +6,50 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <!-- Botón cerrar -->
-    <ImageButton
-        android:id="@+id/btnCloseAssistant"
-        android:layout_width="wrap_content"
+    <!-- Encabezado con ícono y botones -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Cerrar asistente" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="8dp">
+
+        <!-- Ícono del asistente -->
+        <ImageView
+            android:id="@+id/assistantIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_asistant"
+            android:contentDescription="Asistente"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Asistente de TriviaTrainer"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_weight="1"/>
+
+        <!-- Botón de voz on/off -->
+        <ImageButton
+            android:id="@+id/buttonToggleVoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_volume_on"
+            android:contentDescription="Activar/desactivar voz"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Botón cerrar -->
+        <ImageButton
+            android:id="@+id/btnCloseAssistant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Cerrar asistente" />
+    </LinearLayout>
 
     <!-- Lista de mensajes -->
     <androidx.recyclerview.widget.RecyclerView
@@ -54,8 +90,4 @@
             android:contentDescription="Dictado por voz" />
     </LinearLayout>
 
-
 </LinearLayout>
-
-
-
