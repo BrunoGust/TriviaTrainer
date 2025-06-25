@@ -55,6 +55,8 @@ class InicioActivity : AppCompatActivity() {
 
     // Declarar SharedPreferences
     private lateinit var sharedPreferences: SharedPreferences
+    private val PREFS_KEY_BIENVENIDA_MOSTRADA = "bienvenida_mostrada"
+
 
     val config = generationConfig {
         temperature = 0.0f
@@ -252,19 +254,28 @@ class InicioActivity : AppCompatActivity() {
             val dialog = AssistantDialogFragment()
             dialog.arguments = Bundle().apply {
                 putString("pantalla", "inicio")
-                putBoolean("autoBienvenida", true)
+                putBoolean("mensajeInicial", mensajeInicial)
             }
             dialog.show(supportFragmentManager, "AssistantDialog")
+            mensajeInicial=false
         }
 
         // Abrir automáticamente el asistente con un mensaje de bienvenida
-        val dialog = AssistantDialogFragment().apply {
-            arguments = Bundle().apply {
-                putString("pantalla", "inicio")
-                putBoolean("autoBienvenida", true)
+        val yaMostroBienvenida = sharedPreferences.getBoolean(PREFS_KEY_BIENVENIDA_MOSTRADA, false)
+
+        if (!yaMostroBienvenida) {
+            val dialog = AssistantDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putString("pantalla", "inicio")
+                    putBoolean("autoBienvenida", true)
+                }
             }
+            dialog.show(supportFragmentManager, "AssistantDialog")
+
+            // Guardar que ya se mostró
+            sharedPreferences.edit().putBoolean(PREFS_KEY_BIENVENIDA_MOSTRADA, true).apply()
         }
-        dialog.show(supportFragmentManager, "AssistantDialog")
+
 
 
     }

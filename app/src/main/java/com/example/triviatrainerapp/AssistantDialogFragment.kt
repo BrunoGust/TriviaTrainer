@@ -130,8 +130,8 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
                 val recognizedText = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 recognizedText?.firstOrNull()?.let { spokenText ->
                     addMessage(spokenText, isUser = true)
-                    //responderConContexto(spokenText)
-                    simulateAssistantResponse(spokenText)
+                    responderConContexto(spokenText)
+                    //simulateAssistantResponse(spokenText)
                 }
             } else {
                 Toast.makeText(requireContext(), "No se pudo reconocer voz.", Toast.LENGTH_SHORT).show()
@@ -201,8 +201,8 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
             if (userMessage.isNotEmpty()) {
                 addMessage(userMessage, isUser = true)
                 input.text.clear()
-                simulateAssistantResponse(userMessage)
-                //responderConContexto(userMessage)
+                //simulateAssistantResponse(userMessage)
+                responderConContexto(userMessage)
             }
         }
 
@@ -212,13 +212,15 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
 
         recyclerView.scrollToPosition(chatViewModel.messages.size - 1)
 
-        mostrarMensajeInicial()
+
         val mostrarBienvenida = arguments?.getBoolean("autoBienvenida", false) == true
         if (mostrarBienvenida && chatViewModel.messages.isEmpty()) {
-            val mensaje = "Hola, soy tu asistente virtual de TriviaTrainer. Estoy aquí para ayudarte a usar la aplicación y resolver cualquier duda que tengas. Si me necesitas más adelante puedes llamarme haciendo clic en el botón con un signo de interrogación ( ? ). Ahora dime ¿En qué puedo ayudarte hoy?"
+            val mensaje = "Hola! Bienvenido a TriviaTrainer. Soy Trina, tu asistente virtual. Estoy aquí para ayudarte a usar la aplicación y resolver cualquier duda que tengas. Si me necesitas más adelante puedes llamarme haciendo clic en el botón con un signo de interrogación ( ? ). Ahora dime ¿En qué puedo ayudarte hoy?"
             addMessage(mensaje, isUser = false)
 
         }
+
+        mostrarMensajeInicial()
 
 
 
@@ -271,6 +273,10 @@ Tus respuestas deben ser breves (1 o 2 párrafos como máximo) y útiles.
         if(mensajeInicial){
             if (pantalla=="quiz") {
                 val mensaje = "Para responder una pregunta debes seleccionar una respuesta y presionar 'Siguiente Pregunta'. Si tienes alguna duda, házmela saber."
+                addMessage(mensaje, isUser = false)
+            }
+            else if(chatViewModel.messages.isEmpty() ) {
+                val mensaje = "Hola! Dime en qué te puedo ayudar hoy."
                 addMessage(mensaje, isUser = false)
             }
         }
