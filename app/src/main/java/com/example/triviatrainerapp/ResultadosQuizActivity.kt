@@ -1,12 +1,16 @@
 package com.example.triviatrainerapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import com.google.gson.Gson
@@ -100,6 +104,23 @@ class ResultadosQuizActivity : AppCompatActivity() {
             }
             dialog.show(supportFragmentManager, "AssistantDialog")
         }
+        val botonVoz = findViewById<ImageButton>(R.id.voz_btn_resultados_quiz)
+        botonVoz.setOnClickListener {
+            iniciarReconocimientoDeVoz()
+        }
+
+    }
+    private fun iniciarReconocimientoDeVoz() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(android.speech.RecognizerIntent.EXTRA_LANGUAGE_MODEL, android.speech.RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(android.speech.RecognizerIntent.EXTRA_LANGUAGE, "es-ES")
+            putExtra(android.speech.RecognizerIntent.EXTRA_PROMPT, "¿Qué deseas hacer?")
+        }
+        try {
+            startActivityForResult(intent, VOZ_REQUEST_CODE)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Reconocimiento de voz no disponible", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun cargarPreguntasDesdeAssets(): List<Pregunta> {
@@ -117,5 +138,36 @@ class ResultadosQuizActivity : AppCompatActivity() {
         val tipo = object : TypeToken<List<Pregunta>>() {}.type
         return Gson().fromJson(json, tipo)
     }
+    private val comandosProfundizar = listOf("profundizar más", "quiero saber más", "más información")
+    private val comandosSalir = listOf("salir", "nuevo quiz", "intentar de nuevo", "volver al inicio")
+    private val VOZ_REQUEST_CODE = 200
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == VOZ_REQUEST_CODE && resultCode == RESULT_OK) {
+            val resultados = data?.getStringArrayListExtra(android.speech.RecognizerIntent.EXTRA_RESULTS)
+            val texto = resultados?.get(0)?.lowercase() ?: return
+            procesarComandoDeVoz(texto)
+        }
+    }
+    private fun procesarComandoDeVoz(texto: String) {
+        when {
+            comandosProfundizar.any { texto.contains(it) } -> {
+                findViewById<TextView>(R.id.buttonNuevoQuiz)?.performClick()
+            }
+            comandosSalir.any { texto.contains(it) } -> {
+                val intent = Intent(this, LoadingScreenActivity::class.java).apply {
+                    putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
+                    putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo al inicio...")
+                }
+                startActivity(intent)
+                finish()
+            }
+            else -> {
+                Toast.makeText(this, "No se reconoció el comando", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
 
 }
