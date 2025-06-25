@@ -190,10 +190,11 @@ class QuizActivity2 : AppCompatActivity() {
 
             override fun onFinish() {
                 textViewTiempoNumero.text = "00:00"
-                // Si no se seleccionó respuesta, continuar
-                if (opcionSeleccionada == null) {
+
+                    countDownTimer?.cancel()
                     avanzarASiguientePregunta()
-                }
+
+
             }
         }.start()
         // Leeremos la pregunta y respuestas una vez que cambie a la siguiente pregunta
