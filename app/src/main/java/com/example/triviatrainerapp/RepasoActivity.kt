@@ -171,11 +171,13 @@ No incluyas ninguna explicación, ni resumen, ni texto adicional. Solo preguntas
             dialog.show(supportFragmentManager, "AssistantDialog")
         }
 
-        val btnVolver: Button = findViewById(R.id.button)
+        val btnVolver: Button = findViewById(R.id.buttonVolverRepaso)
+
 
         btnVolver.setOnClickListener {
             val intent = Intent(this@RepasoActivity, InicioActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
 
