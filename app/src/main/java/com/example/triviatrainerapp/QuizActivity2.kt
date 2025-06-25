@@ -19,6 +19,9 @@ import com.google.gson.Gson
 import java.io.File
 import android.view.accessibility.AccessibilityManager
 import android.content.ActivityNotFoundException
+import android.media.MediaPlayer
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
@@ -38,6 +41,9 @@ class QuizActivity2 : AppCompatActivity() {
     private var talkBackActivo: Boolean = false // inicialmente considera que el talkback esta desactivado
     private val VOZ_REQUEST_CODE = 100// CONSTANTE RECONOCIMIENTO DE VOZ
     private var tema = ""
+    //propiedades del mediaplayer
+    private var mediaPlayerCorrecto: MediaPlayer? = null
+    private var mediaPlayerIncorrecto: MediaPlayer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -68,6 +74,9 @@ class QuizActivity2 : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        //Inicializamos los mediaPlayer
+        mediaPlayerCorrecto = MediaPlayer.create(this, R.raw.correcto)
+        mediaPlayerIncorrecto = MediaPlayer.create(this, R.raw.incorrecto)
 
         // Configurar botones
         val botonVoz = findViewById<ImageButton>(R.id.voz_btn_quiz2)
@@ -186,6 +195,11 @@ class QuizActivity2 : AppCompatActivity() {
                 val minutos = segundosRestantes / 60
                 val segundos = segundosRestantes % 60
                 textViewTiempoNumero.text = String.format("%02d:%02d", minutos, segundos)
+                if(segundosRestantes in 1..9){
+
+                        vibrarLevemente()
+                    }
+
             }
 
             override fun onFinish() {
@@ -222,7 +236,12 @@ class QuizActivity2 : AppCompatActivity() {
         } else {
             -1 // No respondió
         }
-
+        if (indiceSeleccionado == preguntaActual.respuesta_correcta) {
+            mediaPlayerCorrecto?.start()
+        } else {
+            vibrarLevemente()
+            mediaPlayerIncorrecto?.start()
+        }
         respuestasUsuario.add(
             RespuestaUsuario(
                 idPregunta = preguntaActual.id,
@@ -403,6 +422,17 @@ class QuizActivity2 : AppCompatActivity() {
         opcionSeleccionada = boton
         hablar("Opción seleccionada")
     }
+    private fun vibrarLevemente() {
+        val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
+            ) // 200ms de vibración
+        } else {
+            @Suppress("DEPRECATION")
+            vibrator.vibrate(200)
+        }
+    }
 
     // Liberamos el texto a voz una vez que concluyo la actividad
     override fun onDestroy() {
@@ -410,6 +440,11 @@ class QuizActivity2 : AppCompatActivity() {
             tts.stop()
             tts.shutdown()
         }
+        //limpiamos los recursos de media player
+        mediaPlayerCorrecto?.release()
+        mediaPlayerIncorrecto?.release()
+        mediaPlayerCorrecto = null
+        mediaPlayerIncorrecto = null
         super.onDestroy()
     }
 }
