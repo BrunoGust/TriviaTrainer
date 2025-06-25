@@ -73,6 +73,7 @@ class QuizActivity2 : AppCompatActivity() {
         val btnSalir = findViewById<Button>(R.id.buttonSalirQuiz)
         // hacer clic en salir nos lleva a elegir tema del quiz
         btnSalir.setOnClickListener {
+            countDownTimer?.cancel() // Detenemos el contador antes de terminar el activity
             val exitIntent = Intent(this, LoadingScreenActivity::class.java).apply {
                 putExtra(LoadingScreenActivity.EXTRA_DESTINATION_ACTIVITY_CLASS, InicioActivity::class.java.name)
                 putExtra(LoadingScreenActivity.EXTRA_LOADING_MESSAGE, "Volviendo a elegir tema para quiz")
